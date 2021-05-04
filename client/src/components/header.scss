@@ -1,0 +1,11 @@
+.header {
+    display: flex;
+    align-items: center;
+    padding: 1em;
+    background-color: var(--primary);
+    color: var(--on-primary);
+}
+
+.header__title {
+    font-size: 1.5em;
+}

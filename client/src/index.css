@@ -1,0 +1,57 @@
+body {
+  margin: 0;
+  font-family: 'メイリオ', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+:root {
+  --primary: #5255ff;
+  --on-primary: #ffffff;
+  --surface: #ffffff;
+  --on-surface: #333333;
+  --error: #e6503d;
+  --on-error: #ffffff;
+  --mf: #999999;
+}
+
+.spacer {
+ flex: 1;
+}
+
+.action-btns {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.mt-1 {
+  margin-top: 1em;
+}
+
+/* TODO: あとでコンポーネント化 */
+input[type=text] {
+  padding: 6px;
+  outline: none;
+  border: 2px solid var(--mf);
+  border-radius: 4px;
+  transition: border-color 0.3s;
+}
+input[type=text]:focus {
+  border-color: var(--primary);
+}
+button {
+  border: 1px solid var(--primary);
+  background-color: var(--primary);
+  color: var(--on-primary);
+  padding: 6px;
+  border-radius: 4px;
+  min-width: 45px;
+  cursor: pointer;
+}
+button.is-error {
+  border: 1px solid var(--error);
+  background-color: var(--error);
+  color: var(--on-error);
+}

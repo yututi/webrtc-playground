@@ -31,6 +31,7 @@ const UserDialog: React.FC<DialogProps> = ({ onUserNameDefined, defaultName }) =
     const [name, setName] = useState("")
 
     const onDefined = () => {
+        console.log("ondef")
         onUserNameDefined(name || defaultName)
         setIsDefined(true)
     }

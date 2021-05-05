@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import ReactDOM from "react-dom"
 import { classMap } from "utils"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -7,7 +7,7 @@ import "./dialog.scss"
 
 type Props = {
     isOpen: boolean
-    close: () => void
+    close?: () => void
     dialogTitle: string
 }
 
@@ -15,22 +15,28 @@ const Dialog: React.FC<Props> = ({ children, isOpen, dialogTitle, close }) => {
 
     const [isAnimInProg, setIsAnimInProg] = useState(false)
 
+    const didMount = useRef(false)
+    const beforeIsOpen = useRef(isOpen)
+    const isOpenStateChanged = beforeIsOpen.current !== isOpen
+
     const modalClass = classMap({
-        "modal--is-open": isOpen
+        "modal--is-open": isOpen && !isOpenStateChanged
     })
     const presentationClass = classMap({
-        "presentation--is-open": isOpen
+        "presentation--is-open": isOpen && !isOpenStateChanged
     })
 
     useEffect(() => {
-        setIsAnimInProg(true)
+        if (didMount.current) setIsAnimInProg(true)
+        else didMount.current = true
+        beforeIsOpen.current = isOpen
     }, [isOpen])
 
     const onAnimEnd = () => {
         setIsAnimInProg(false)
     }
 
-    if (isOpen || isAnimInProg) return ReactDOM.createPortal(
+    if (isOpen || isAnimInProg || isOpenStateChanged) return ReactDOM.createPortal(
         <>
             <div className={`modal ${modalClass}`} onTransitionEnd={onAnimEnd}></div>
             <div className={`presentation ${presentationClass}`}>
@@ -38,7 +44,7 @@ const Dialog: React.FC<Props> = ({ children, isOpen, dialogTitle, close }) => {
                     <div className="dialog__header">
                         <div className="dialog__title">{dialogTitle}</div>
                         <div className="spacer"></div>
-                        <FontAwesomeIcon onClick={close} className="dialog__header-icon" icon={faTimes} />
+                        {close ? <FontAwesomeIcon onClick={close} className="dialog__header-icon" icon={faTimes} /> : ""}
                     </div>
                     <div className="dialog__body">
                         {children}

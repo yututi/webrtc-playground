@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState, useContext, useCallback } from "react"
+import { createContext, useEffect, useState, useContext, useCallback, useRef } from "react"
 import { Room } from "./types"
 import { useSocket } from "./socket"
 import { get } from "utils"
@@ -6,7 +6,7 @@ import { get } from "utils"
 
 type RoomsState = {
     rooms: Room[]
-    addRoom: (room: Room) => void
+    addRoom: (room: string) => void
     removeRoom: (roomId: string) => void
 }
 
@@ -19,30 +19,56 @@ const RoomsContext = createContext<RoomsState>({
 
 export const RoomsProvider: React.FC = ({ children }) => {
 
-    const { socket, isConnected } = useSocket()
+    const { socket } = useSocket()
     const [rooms, setRooms] = useState<Room[]>([])
+    const roomsRef = useRef<Room[]>([])
+    roomsRef.current = rooms
 
     useEffect(() => {
         get("api/rooms")
             .then(res => res.json())
+            .then(res => {
+                console.log(res)
+                return res
+            })
             .then(rooms => setRooms(rooms))
     }, [])
 
     useEffect(() => {
-        console.log("isConnected", isConnected)
-        if (!isConnected) return
 
         const onRoomAdded = (data) => {
-            setRooms([...rooms, data])
+            console.log("room-added", data)
+            console.log("rooms", rooms)
+            setRooms([...roomsRef.current, { name: data, users: 0 }])
         }
 
         const onRoomRemoved = (data) => {
-            setRooms(rooms.filter(room => room.id === data))
+            setRooms(roomsRef.current.filter(room => room.name === data))
+        }
+
+        const onMemberJoined = (data) => {
+            console.log("member-joined", data)
+            const room = roomsRef.current.find(room => room.name === data.room)
+            if (room) {
+                room.users++
+                setRooms([...roomsRef.current])
+            }
+        }
+
+        const onMemberLeaved = (data) => {
+            console.log("member-leaved", data)
+            const room = roomsRef.current.find(room => room.name === data.room)
+            if (room) {
+                room.users--
+                setRooms([...roomsRef.current])
+            }
         }
 
         const events = {
             "room-added": onRoomAdded,
-            "room-removed": onRoomRemoved
+            "room-removed": onRoomRemoved,
+            "member-joined": onMemberJoined,
+            "member-leaved": onMemberLeaved
         }
 
         Object.entries(events).forEach(([name, handler]) => {
@@ -54,15 +80,16 @@ export const RoomsProvider: React.FC = ({ children }) => {
                 socket.off(name, handler)
             })
         }
-    }, [isConnected])
+    }, [socket])
 
-    const addRoom = useCallback((room: Room) => {
+    const addRoom = useCallback((room: string) => {
+        console.log("add-room")
         socket.emit("add-room", room)
-    }, [])
+    }, [socket])
 
     const removeRoom = useCallback((roomId: string) => {
         socket.emit("remove-room", roomId)
-    }, [])
+    }, [socket])
 
     const value = {
         rooms,

@@ -43,11 +43,6 @@ const AddRoomForm: React.FC<AddRoomProps> = ({ requestClose }) => {
 
     const addNewRoom = () => {
 
-        addRoom({
-            id: "fuga",
-            name: "hoge",
-            type: "voice"
-        })
     }
 
     return (

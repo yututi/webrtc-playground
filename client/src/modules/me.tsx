@@ -1,4 +1,5 @@
 import { createContext, useState, useContext } from "react"
+import { useSocket } from "./socket"
 
 type MeState = {
     name: string
@@ -14,7 +15,14 @@ export const MeProvider: React.FC = ({ children }) => {
 
     const [name, setName] = useState("GUEST")
 
-    return <MeContext.Provider value={{ name, setName }}> {children} </MeContext.Provider>
+    const { socket } = useSocket()
+
+    const setNameWrapper = (name: string) => {
+        socket.emit("set-name", name)
+        setName(name)
+    }
+
+    return <MeContext.Provider value={{ name, setName: setNameWrapper }}> {children} </MeContext.Provider>
 }
 
 export const useMeContext = () => {

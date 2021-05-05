@@ -6,42 +6,45 @@ import { useSocket } from "./socket"
 type RoomState = {
     isJoined: boolean
     room: Room
+    setRoom: (room: Room) => void
     users: User[]
-    addUserWithOffer: (user: User) => void
+    addUserWithOffer: (user: User) => void // これの用途思い出せない
 }
 
 const RoomContext = createContext<RoomState>({
     isJoined: false,
     room: null,
+    setRoom: () => { },
     users: [],
     addUserWithOffer: () => { }
 })
 
-type Props = {
-    room: Room
-}
 
-export const RoomProvider: React.FC<Props> = ({ room, children }) => {
+export const RoomProvider: React.FC = ({ children }) => {
 
-    const { socket, isConnected } = useSocket()
+    const { socket } = useSocket()
+
+    const [room, setRoom] = useState<Room>(null)
 
     const [isJoined, setIsJoined] = useState(false)
 
     const [users, setUsers] = useState<User[]>([])
 
     useEffect(() => {
-        if (!isConnected) return
+        if (!room) return
 
-        socket.emit("join-room", room)
+        socket.emit("join-room", room.name)
 
-        const onRoomJoined = alreadyJoinedMemberInfos => {
+        const onRoomJoined = alreadyJoinedMemberIds => {
+            console.log(alreadyJoinedMemberIds)
             setIsJoined(true)
-            setUsers([...users, ...alreadyJoinedMemberInfos.map(member => {
-                return {
-                    id: member.id,
-                    name: member.name
-                }
-            })])
+            setUsers([...users, ...alreadyJoinedMemberIds
+                // .filter(member => member.id !== socket.id)
+                .map(id => {
+                    return {
+                        id: id
+                    }
+                })])
         }
 
         const onMemberLeaved = leavedMemberId => {
@@ -66,8 +69,11 @@ export const RoomProvider: React.FC<Props> = ({ room, children }) => {
             Object.entries(events).forEach(([name, handler]) => {
                 socket.off(name, handler)
             })
+            socket.emit("leave-room", {
+                room: room.name,
+            })
         }
-    }, [room, isConnected])
+    }, [room])
 
     const addUserWithOffer = (user: User) => {
         setUsers([...users, user])
@@ -76,6 +82,7 @@ export const RoomProvider: React.FC<Props> = ({ room, children }) => {
     const value = {
         isJoined,
         room,
+        setRoom,
         users,
         addUserWithOffer
     }

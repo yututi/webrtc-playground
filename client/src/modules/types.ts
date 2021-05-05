@@ -1,7 +1,7 @@
 export type Room = {
-    id: string
     name: string
-    type: "voice" | "text"
+    users: number
+    type?: "voice" | "text"
 }
 
 export type User = {

@@ -1,7 +1,6 @@
 import React, { createContext, useEffect, useState, useContext, useMemo } from "react"
 import { User } from "./types"
 import { useSocket } from "./socket"
-import { useRoomContext } from "./room"
 import { useMeContext } from "./me"
 
 
@@ -33,21 +32,20 @@ type Props = {
 
 export const UserProvider: React.FC<Props> = ({ user, children }) => {
 
-    const connection = useMemo(() => new RTCPeerConnection({/* conf */ }), [user.id])
 
     // streamじゃなくてref?
-    const stream = useMemo(() => new MediaStream(), [user.id])
+    const stream = useMemo(() => new MediaStream(), [])
 
     const [isRtcConnected, setIsRtcConnected] = useState(false)
 
     const [name, setName] = useState("-")
 
-    const { socket, isConnected } = useSocket()
+    const { socket } = useSocket()
 
     const { name: myName } = useMeContext()
 
     useEffect(() => {
-        if (!isConnected) return
+        const connection = new RTCPeerConnection({/* conf */ })
 
         console.log("peer created.", user.id)
 
@@ -86,6 +84,7 @@ export const UserProvider: React.FC<Props> = ({ user, children }) => {
                     })
                     sendCandidate()
                 })
+            setName(user.name)
         } else {
             connection.createOffer().then(offer => {
                 connection.setLocalDescription(offer)
@@ -120,7 +119,7 @@ export const UserProvider: React.FC<Props> = ({ user, children }) => {
                 socket.off(name, handler)
             })
         }
-    }, [user.id])
+    }, [user.id, socket])
 
     const value = {
         isConnected: isRtcConnected,

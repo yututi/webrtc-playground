@@ -17,7 +17,7 @@ type CandidateInfo = {
 type AnswerInfo = {
     from: string
     name: string
-    description: RTCSessionDescriptionInit
+    answer: RTCSessionDescriptionInit
 }
 
 const UserContext = createContext<UserState>({
@@ -32,6 +32,7 @@ type Props = {
 
 export const UserProvider: React.FC<Props> = ({ user, children }) => {
 
+    // TODO useReducerへの置き換え
 
     // streamじゃなくてref?
     const stream = useMemo(() => new MediaStream(), [])
@@ -69,7 +70,6 @@ export const UserProvider: React.FC<Props> = ({ user, children }) => {
             }
         }
 
-
         // RTCの作成
         if (user.offer) {
             connection.setRemoteDescription(user.offer)
@@ -96,8 +96,9 @@ export const UserProvider: React.FC<Props> = ({ user, children }) => {
                 })
             })
             socketEvents.answer = (answerInfo: AnswerInfo) => {
+                console.log("answerInfo", answerInfo)
                 if (user.id === answerInfo.from) {
-                    connection.setRemoteDescription(answerInfo.description)
+                    connection.setRemoteDescription(answerInfo.answer)
                     sendCandidate()
                     setName(answerInfo.name)
                 }

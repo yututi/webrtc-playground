@@ -75,9 +75,11 @@ io.on('connection', (socket) => {
     })
 
     socket.on("offer", offer => {
+        console.log("offer", offer)
         socket.to(offer.to).emit("offer", offer)
     })
     socket.on("answer", answer => {
+        console.log("answer", answer)
         socket.to(answer.to).emit("answer", answer)
     })
 

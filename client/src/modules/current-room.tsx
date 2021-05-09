@@ -36,13 +36,13 @@ export const RoomProvider: React.FC = ({ children }) => {
         socket.emit("join-room", room.name)
 
         const onRoomJoined = alreadyJoinedMemberIds => {
-            console.log(alreadyJoinedMemberIds)
+            console.log("alreadyJoinedMemberIds", alreadyJoinedMemberIds)
             setIsJoined(true)
             setUsers([...users, ...alreadyJoinedMemberIds
                 // .filter(member => member.id !== socket.id)
                 .map(id => {
                     return {
-                        id: id
+                        id
                     }
                 })])
         }
@@ -52,7 +52,12 @@ export const RoomProvider: React.FC = ({ children }) => {
         }
 
         const onMemberJoined = offerInfo => {
-            setUsers([...users, offerInfo])
+            console.log("offerInfo", offerInfo)
+            setUsers([...users, {
+                id: offerInfo.from,
+                offer: offerInfo.offer,
+                name: offerInfo.name
+            }])
         }
 
         const events = {

@@ -8,7 +8,7 @@ import { useRoomContext } from "modules/current-room";
 
 const RoomAdder = React.lazy(() => import("components/room-adder"))
 
-const Rooms: React.FC = () => {
+const Rooms: React.FC = React.memo(() => {
 
     const { rooms } = useRoomsContext()
 
@@ -19,10 +19,10 @@ const Rooms: React.FC = () => {
                 <h3>No rooms...</h3>
             ) : ""
             }
-            <Suspense fallback={<div></div>}><RoomAdder /></Suspense>
+            <Suspense fallback={null}><RoomAdder /></Suspense>
         </div>
     )
-}
+})
 
 type Props = {
     room: Room

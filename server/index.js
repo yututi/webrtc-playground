@@ -83,6 +83,11 @@ io.on('connection', (socket) => {
         socket.to(answer.to).emit("answer", answer)
     })
 
+    socket.on("candidate", candidateInfo => {
+        console.log("candidate", candidateInfo)
+        socket.to(candidateInfo.to).emit("candidate", candidateInfo)
+    })
+
     socket.on("disconnect", () => {
         console.log('id: ' + socket.id + ' is disconnected')
         delete userId2Name[socket.id]

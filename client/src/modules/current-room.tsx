@@ -74,9 +74,7 @@ export const RoomProvider: React.FC = ({ children }) => {
             Object.entries(events).forEach(([name, handler]) => {
                 socket.off(name, handler)
             })
-            socket.emit("leave-room", {
-                room: room.name,
-            })
+            socket.emit("leave-room", room.name)
         }
     }, [room])
 

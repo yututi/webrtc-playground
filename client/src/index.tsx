@@ -5,6 +5,8 @@ import App from './App';
 import { MeProvider } from "modules/me"
 import { RoomsProvider } from "modules/rooms"
 import { RoomProvider } from "modules/current-room"
+import { CurrentDeviceProvider } from "modules/current-device"
+import { DeviceProvider } from "modules/devices";
 
 const composeWrappers = (
   wrappers: React.FC[]
@@ -17,7 +19,9 @@ const composeWrappers = (
 const RootProvider = composeWrappers([
   props => <MeProvider>{props.children}</MeProvider>,
   props => <RoomsProvider>{props.children}</RoomsProvider>,
-  props => <RoomProvider>{props.children}</RoomProvider>
+  props => <RoomProvider>{props.children}</RoomProvider>,
+  props => <CurrentDeviceProvider>{props.children}</CurrentDeviceProvider>,
+  props => <DeviceProvider>{props.children}</DeviceProvider>
 ])
 
 ReactDOM.render(

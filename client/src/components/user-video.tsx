@@ -13,6 +13,7 @@ const User: React.FC = () => {
 
     useEffect(() => {
         videoRef.current.srcObject = stream
+        videoRef.current.volume = 0
     }, [stream])
 
     return (

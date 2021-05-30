@@ -2,6 +2,8 @@ import React, { createContext, useEffect, useState, useContext, useMemo } from "
 import { User } from "./types"
 import { useSocket } from "./socket"
 import { useMeContext } from "./me"
+import { useDeviceContext } from "./devices"
+import { useCurrentDeviceContext } from "./current-device"
 
 
 type UserState = {
@@ -45,34 +47,57 @@ export const UserProvider: React.FC<Props> = ({ user, children }) => {
 
     const { name: myName } = useMeContext()
 
+    const connection = useMemo(() => new RTCPeerConnection({ 'iceServers': [{ 'urls': 'stun:stun.l.google.com:19302' }] }), [user.id, socket])
+
     useEffect(() => {
-        const connection = new RTCPeerConnection({/* conf */ })
 
         console.log("peer created.", user.id)
 
         const socketEvents: { [key: string]: (...args: any[]) => void } = {}
 
         // 経路候補の交換
-        const sendCandidate = () => {
-            connection.onicecandidate = event => {
-                if (!event.candidate) return
-                socket.emit("candidate", {
-                    to: user.id,
-                    from: socket.id,
-                    candidate: JSON.stringify(event.candidate)
-                })
-            }
-        }
+        connection.addEventListener("icecandidate", event => {
+            console.log("candidate", event.candidate)
+            if (!event.candidate) return
+            console.log("send candidate")
+            socket.emit("candidate", {
+                to: user.id,
+                from: socket.id,
+                candidate: JSON.stringify(event.candidate)
+            })
+        })
 
         socketEvents.candidate = (candidateInfo: CandidateInfo) => {
+            console.log("receive candidate", candidateInfo)
             if (candidateInfo.from === user.id) {
                 connection.addIceCandidate(new RTCIceCandidate(JSON.parse(candidateInfo.candidate)))
             }
         }
 
+        const addStreamToConnection = () => {
+            return navigator.mediaDevices.getUserMedia({
+                video: {
+                    deviceId: camera.deviceId,
+                    height: 300,
+                    width: 400
+                },
+                audio: {
+                    deviceId: audioIn.deviceId,
+                    noiseSuppression: true,
+                    echoCancellation: true
+                }
+            }).then(stream => {
+
+                stream.getTracks().forEach(track => {
+                    connection.addTrack(track)
+                })
+            })
+        }
+
         // RTCの作成
         if (user.offer) {
             connection.setRemoteDescription(user.offer)
+                .then(addStreamToConnection)
                 .then(() => connection.createAnswer())
                 .then(answer => {
                     connection.setLocalDescription(answer)
@@ -82,31 +107,39 @@ export const UserProvider: React.FC<Props> = ({ user, children }) => {
                         name: myName,
                         answer: answer
                     })
-                    sendCandidate()
                 })
             setName(user.name)
         } else {
-            connection.createOffer().then(offer => {
-                connection.setLocalDescription(offer)
-                socket.emit("offer", {
-                    to: user.id,
-                    from: socket.id,
-                    name: myName,
-                    offer: offer
+            addStreamToConnection().then(() => {
+                connection.createOffer().then(offer => {
+                    connection.setLocalDescription(offer)
+                    socket.emit("offer", {
+                        to: user.id,
+                        from: socket.id,
+                        name: myName,
+                        offer: offer
+                    })
                 })
             })
+
             socketEvents.answer = (answerInfo: AnswerInfo) => {
-                console.log("answerInfo", answerInfo)
+                console.log("answerInfo", answerInfo, user)
                 if (user.id === answerInfo.from) {
-                    connection.setRemoteDescription(answerInfo.answer)
-                    sendCandidate()
+                    console.log("answered", user.id)
+                    connection.setRemoteDescription(new RTCSessionDescription(answerInfo.answer))
                     setName(answerInfo.name)
                 }
             }
         }
 
         connection.addEventListener("connectionstatechange", () => {
+            console.log("connection state chanhed.", connection.connectionState)
             setIsRtcConnected(connection.connectionState === "connected")
+        })
+
+        connection.addEventListener("track", e => {
+            console.log("track added")
+            stream.addTrack(e.track)
         })
 
         Object.entries(socketEvents).forEach(([name, handler]) => {
@@ -121,6 +154,41 @@ export const UserProvider: React.FC<Props> = ({ user, children }) => {
             })
         }
     }, [user.id, socket])
+
+    const { camera, audioIn } = useCurrentDeviceContext()
+
+    // useEffect(() => {
+
+    //     const tracks = []
+
+    //     navigator.mediaDevices.getUserMedia({
+    //         video: {
+    //             deviceId: camera.deviceId,
+    //             height: 300,
+    //             width: 400
+    //         },
+    //         audio: {
+    //             deviceId: audioIn.deviceId,
+    //             noiseSuppression: true,
+    //             echoCancellation: true
+    //         }
+    //     }).then(stream => {
+
+    //         stream.getAudioTracks().forEach(track => {
+    //             tracks.push(track)
+    //             connection.addTrack(track)
+    //         })
+    //     })
+
+    //     return () => {
+    //         if (connection.connectionState === "connected") {
+    //             tracks.forEach(track => {
+    //                 connection.removeTrack(track)
+    //             })
+    //         }
+    //     }
+
+    // }, [camera, audioIn])
 
     const value = {
         isConnected: isRtcConnected,

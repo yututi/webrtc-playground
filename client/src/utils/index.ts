@@ -6,7 +6,7 @@ export function classMap(obj: { [key: string]: any }): string {
 
 export function get(path: string, param?: { [key: string]: any }) {
 
-    const base = isDevelopment ? "http://localhost:5000": window.location
+    const base = isDevelopment ? "http://localhost:5000" : window.location
     const queries = param ? `?${new URLSearchParams(param)}` : ""
     const url = `${base}/${path}${queries}`
 
@@ -15,3 +15,5 @@ export function get(path: string, param?: { [key: string]: any }) {
         cache: "no-cache"
     })
 }
+
+export const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)

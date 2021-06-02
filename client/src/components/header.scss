@@ -4,6 +4,11 @@
     padding: 1em;
     background-color: var(--primary);
     color: var(--on-primary);
+
+    &__left {
+        display: flex;
+        align-items: center;
+    }
 }
 
 .header__title {

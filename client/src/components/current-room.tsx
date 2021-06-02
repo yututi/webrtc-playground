@@ -8,9 +8,14 @@ import MyVideo from "components/my-video"
 
 
 const CurrentRoom: React.FC = () => {
-    const { users } = useRoomContext()
+    const { users, room, setRoom } = useRoomContext()
     return (
         <div className="current-room">
+            <div className="current-room__header flex is-align-center">
+                <span>{room.name}</span>
+                <div className="spacer"></div>
+                <button onClick={() => setRoom(null)}>Leave</button>
+            </div>
             <div className="current-room__users">
                 {users.map(user => {
                     return (

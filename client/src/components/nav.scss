@@ -1,0 +1,50 @@
+@import "~styles/media.scss";
+
+:root {
+    --nav-width: 300px;
+}
+
+.nav-bg {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+
+    opacity: 0;
+    transition: opacity 0.3s;
+    background-color: black;
+    display: none;
+}
+
+.nav {
+    width: var(--nav-width);
+    top: 0px;
+    bottom: 0px;
+    left: -100%;
+    position: absolute;
+
+    transition: left 0.3s, right 0.3s;
+
+    @include pc {
+        height: 100%;
+    }
+
+    @include sp {
+        z-index: 1;
+        position: fixed;
+    }
+
+    &.is-open {
+        left: 0px;
+    }
+
+    &.is-right {
+        left: initial;
+        right: var(--nav-width);
+
+        &.is-open {
+            right: 0px;
+        }
+    }
+}

@@ -8,6 +8,10 @@ type CurrentDeviceState = {
     outDevice: MediaDeviceInfo
     setInDevices: (arg: SetDeviceType) => void
     setOutDevice: (device: MediaDeviceInfo) => void
+    isVideoMute: boolean
+    isAudioMute: boolean
+    setIsVideoMute: (mute:boolean) => void
+    setIsAudioMute: (mute:boolean) => void
 }
 
 const CurrentDeviceContext = createContext<CurrentDeviceState>(null)
@@ -16,6 +20,9 @@ export const CurrentDeviceProvider: React.FC = ({ children }) => {
 
     const [camera, setCamera] = useState<MediaDeviceInfo>(null)
     const [audioIn, setAudioIn] = useState<MediaDeviceInfo>(null)
+
+    const [isVideoMute, setIsVideoMute] = useState(false)
+    const [isAudioMute, setIsAudioMute] = useState(false)
 
     const [outDevice, setOutDevice] = useState<MediaDeviceInfo>(null)
 
@@ -59,7 +66,11 @@ export const CurrentDeviceProvider: React.FC = ({ children }) => {
         audioIn,
         outDevice,
         setInDevices,
-        setOutDevice
+        setOutDevice,
+        isVideoMute,
+        isAudioMute,
+        setIsVideoMute,
+        setIsAudioMute
     }
 
     return <CurrentDeviceContext.Provider value={value}> {children} </CurrentDeviceContext.Provider>

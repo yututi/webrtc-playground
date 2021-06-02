@@ -37,8 +37,6 @@ const Video = () => {
 
     const { camera } = useCurrentDeviceContext()
 
-    console.log(camera)
-
     useEffect(() => {
         if (!camera) return
         navigator.mediaDevices.getUserMedia({

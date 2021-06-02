@@ -3,10 +3,14 @@ import Dialog from "components/dialog"
 import { useDeviceContext } from "modules/devices"
 import { useCurrentDeviceContext } from "modules/current-device"
 import "./my-video.scss"
+import IconBtn from "components/icon-btn"
+import { faArrowCircleUp, faArrowCircleDown } from "@fortawesome/free-solid-svg-icons"
 
 const MyVideo: React.VFC = () => {
 
     const [isDialogOpen, setIsDialogOpen] = useState(false)
+
+    const [isOpen, setIsOpen] = useState(true)
 
     const { isPermitted, requestPermission } = useDeviceContext()
 
@@ -20,13 +24,20 @@ const MyVideo: React.VFC = () => {
     }
 
     return (
-        <div className="own-video">
-            <Video></Video>
-            <button className="btn" onClick={openDialog}>カメラを選択</button>
-            <DeviceSelectDialog
-                isOpen={isDialogOpen && isPermitted}
-                close={closeDialog}
-            />
+        <div className={`my-video ${isOpen?"my-video--is-open": ""}`}>
+            <div className="my-video__box box">
+                <div className="box__opener">
+                    <IconBtn icon={isOpen ? faArrowCircleDown: faArrowCircleUp} color="secondary" onClick={() => setIsOpen(!isOpen)}></IconBtn>
+                </div>
+                <Video></Video>
+                <div className="box__btns action-btns">
+                    <button className="btn" onClick={openDialog}>カメラを選択</button>
+                </div>
+                <DeviceSelectDialog
+                    isOpen={isDialogOpen && isPermitted}
+                    close={closeDialog}
+                />
+            </div>
         </div>
     )
 }
@@ -39,6 +50,7 @@ const Video = () => {
 
     useEffect(() => {
         if (!camera) return
+        const currentEl = ref.current
         navigator.mediaDevices.getUserMedia({
             video: {
                 deviceId: camera.deviceId,
@@ -47,11 +59,11 @@ const Video = () => {
             },
             audio: false
         }).then(stream => {
-            ref.current.srcObject = stream
+            currentEl.srcObject = stream
         })
 
         return () => {
-            ref.current.srcObject = null
+            currentEl.srcObject = null
         }
     }, [camera])
 

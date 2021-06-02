@@ -12,7 +12,7 @@ const Header: React.FC<Props> = ({ title, onHamburgerClick }) => {
         <div className="header">
             <div className="header__left">
                 {onHamburgerClick && <IconBtn icon={faHamburger} onClick={onHamburgerClick} />}
-                <h2 className="header__title">{title}</h2>
+                <span className="header__title">{title}</span>
             </div>
             <div className="spacer"></div>
             <div className="header__right">

@@ -119,7 +119,7 @@ export const UserProvider: React.FC<Props> = ({ user, children }) => {
 
     useEffect(() => {
         p2p.setDevice({ videoDeviceId: camera.deviceId, audioDeviceId: audioIn.deviceId })
-    }, [camera, audioIn, user.id])
+    }, [camera, audioIn, user.id, p2p])
 
     const value = {
         isConnected: isRtcConnected,

@@ -17,9 +17,10 @@ app.use(express.json())
 app.get("/api/rooms", (req, res) => {
     console.log(rooms)
     res.status(200).json(rooms.map(roomName => {
+        const rooms = io.sockets.adapter.rooms.get(roomName)
         return {
             name: roomName,
-            users: io.sockets.adapter.rooms.get(roomName)?.size || 0
+            users: rooms ? rooms.size : 0
         }
     }))
 })

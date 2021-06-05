@@ -21,8 +21,8 @@ export const CurrentDeviceProvider: React.FC = ({ children }) => {
     const [camera, setCamera] = useState<MediaDeviceInfo>(null)
     const [audioIn, setAudioIn] = useState<MediaDeviceInfo>(null)
 
-    const [isVideoMute, setIsVideoMute] = useState(false)
-    const [isAudioMute, setIsAudioMute] = useState(false)
+    const [isVideoMute, setIsVideoMute] = useState(true)
+    const [isAudioMute, setIsAudioMute] = useState(true)
 
     const [outDevice, setOutDevice] = useState<MediaDeviceInfo>(null)
 

@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from "react"
 import ReactDOM from "react-dom"
 import { classMap } from "utils"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faTimes } from "@fortawesome/free-solid-svg-icons"
 import "./dialog.scss"
 import { useDynamicAnimation } from "utils/custom-hooks"
+import IconBtn from "./icon-btn"
 
 type Props = {
     isOpen: boolean
@@ -35,7 +35,7 @@ const Dialog: React.FC<Props> = ({ children, isOpen, dialogTitle, close }) => {
                     <div className="dialog__header">
                         <div className="dialog__title">{dialogTitle}</div>
                         <div className="spacer"></div>
-                        {close ? <FontAwesomeIcon onClick={close} className="dialog__header-icon" icon={faTimes} /> : ""}
+                        {close ? <IconBtn color="secondary" onClick={close} className="dialog__header-icon" icon={faTimes} reverse/> : ""}
                     </div>
                     <div className="dialog__body">
                         {children}

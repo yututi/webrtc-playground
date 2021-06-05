@@ -4,39 +4,32 @@ import { useDeviceContext } from "modules/devices"
 import { useCurrentDeviceContext } from "modules/current-device"
 import "./my-video.scss"
 import IconBtn from "components/icon-btn"
-import { faArrowCircleUp, faArrowCircleDown } from "@fortawesome/free-solid-svg-icons"
+import {
+    faArrowCircleUp,
+    faArrowCircleDown,
+    faVolumeMute,
+    faVolumeUp,
+    faVideo,
+    faVideoSlash,
+    faCog
+} from "@fortawesome/free-solid-svg-icons"
 
 const MyVideo: React.VFC = () => {
 
-    const [isDialogOpen, setIsDialogOpen] = useState(false)
-
     const [isOpen, setIsOpen] = useState(true)
 
-    const { isPermitted, requestPermission } = useDeviceContext()
-
-    const closeDialog = useCallback(() => setIsDialogOpen(false), [])
-
-    const openDialog = () => {
-        setIsDialogOpen(true)
-        !isPermitted && requestPermission().then(permit => {
-            !permit && alert("カメラとマイクへのアクセスを許可してください")
-        })
-    }
-
     return (
-        <div className={`my-video ${isOpen?"my-video--is-open": ""}`}>
+        <div className={`my-video ${isOpen ? "my-video--is-open" : ""}`}>
             <div className="my-video__box box">
                 <div className="box__opener">
-                    <IconBtn icon={isOpen ? faArrowCircleDown: faArrowCircleUp} color="secondary" onClick={() => setIsOpen(!isOpen)}></IconBtn>
+                    <IconBtn 
+                        icon={isOpen ? faArrowCircleDown : faArrowCircleUp} 
+                        color="secondary" 
+                        onClick={() => setIsOpen(!isOpen)}
+                    />
                 </div>
                 <Video></Video>
-                <div className="box__btns action-btns">
-                    <button className="btn" onClick={openDialog}>カメラを選択</button>
-                </div>
-                <DeviceSelectDialog
-                    isOpen={isDialogOpen && isPermitted}
-                    close={closeDialog}
-                />
+                <VideoActions></VideoActions>
             </div>
         </div>
     )
@@ -46,11 +39,21 @@ const Video = () => {
 
     const ref = useRef<HTMLVideoElement>(null)
 
-    const { camera } = useCurrentDeviceContext()
+    const {
+        camera,
+        isVideoMute
+    } = useCurrentDeviceContext()
 
     useEffect(() => {
         if (!camera) return
+
         const currentEl = ref.current
+
+        if (isVideoMute) {
+            currentEl.srcObject = null
+            return
+        }
+
         navigator.mediaDevices.getUserMedia({
             video: {
                 deviceId: camera.deviceId,
@@ -65,11 +68,64 @@ const Video = () => {
         return () => {
             currentEl.srcObject = null
         }
-    }, [camera])
+    }, [camera, isVideoMute])
 
     return (
         <div className="video">
             <video ref={ref} autoPlay></video>
+        </div>
+    )
+}
+
+const VideoActions = () => {
+
+    const [isDialogOpen, setIsDialogOpen] = useState(false)
+
+    const { isPermitted, requestPermission } = useDeviceContext()
+
+    const closeDialog = useCallback(() => setIsDialogOpen(false), [])
+
+    const openDialog = () => {
+        setIsDialogOpen(true)
+        !isPermitted && requestPermission().then(permit => {
+            !permit && alert("カメラとマイクへのアクセスを許可してください")
+        })
+    }
+
+    const {
+        isAudioMute,
+        setIsAudioMute,
+        isVideoMute,
+        setIsVideoMute
+    } = useCurrentDeviceContext()
+
+    return (
+        <div className="box__btns action-btns">
+            <IconBtn
+                iconSize="lg"
+                icon={faCog}
+                onClick={openDialog}
+                reverse
+                color="white"
+            />
+            <IconBtn
+                iconSize="lg"
+                icon={isAudioMute ? faVolumeMute : faVolumeUp}
+                onClick={() => setIsAudioMute(!isAudioMute)}
+                reverse
+                color="white"
+            />
+            <IconBtn
+                iconSize="lg"
+                icon={isVideoMute ? faVideoSlash : faVideo}
+                onClick={() => setIsVideoMute(!isVideoMute)}
+                reverse
+                color="white"
+            />
+            <DeviceSelectDialog
+                isOpen={isDialogOpen && isPermitted}
+                close={closeDialog}
+            />
         </div>
     )
 }
@@ -92,31 +148,25 @@ const DeviceSelectDialog: React.FC<DialogProps> = React.memo(({ isOpen, close })
 
     return (
         <Dialog isOpen={isOpen} dialogTitle="デバイスを選択してください" close={close}>
-            <div className="device-types">
-                <div className="device-type">
-                    <DeviceSelector
-                        label="カメラ"
-                        currentDevice={camera}
-                        devices={videoinput}
-                        onSelect={device => setInDevices({ camera: device, audioIn })}
-                    />
-                </div>
-                <div className="device-type">
-                    <DeviceSelector
-                        label="オーディオ(入力)"
-                        currentDevice={audioIn}
-                        devices={audioinput}
-                        onSelect={device => setInDevices({ camera, audioIn: device })}
-                    />
-                </div>
-                <div className="device-type">
-                    <DeviceSelector
-                        label="オーディオ(出力)"
-                        currentDevice={outDevice}
-                        devices={audiooutput}
-                        onSelect={device => setOutDevice(device)}
-                    />
-                </div>
+            <div className="device-selectors flex is-vertical">
+                <DeviceSelector
+                    label="カメラ"
+                    currentDevice={camera}
+                    devices={videoinput}
+                    onSelect={device => setInDevices({ camera: device, audioIn })}
+                />
+                <DeviceSelector
+                    label="オーディオ(入力)"
+                    currentDevice={audioIn}
+                    devices={audioinput}
+                    onSelect={device => setInDevices({ camera, audioIn: device })}
+                />
+                <DeviceSelector
+                    label="オーディオ(出力)"
+                    currentDevice={outDevice}
+                    devices={audiooutput}
+                    onSelect={device => setOutDevice(device)}
+                />
             </div>
         </Dialog >
     )
@@ -134,9 +184,9 @@ const DeviceSelector: React.FC<DeviceSelectorProps> = React.memo(({ label, curre
     const toDeviceName = (device: (MediaDeviceInfo)) => device.deviceId === "default" ? "デフォルト" : device.label
 
     return (
-        <>
-            <label>{label}</label>
-            <select value={currentDevice?.deviceId} onChange={e => onSelect(devices.find(d => d.deviceId === e.target.value))}>
+        <div className="device-select">
+            <label className="device-select__label">{label}</label>
+            <select className="device-select__select" value={currentDevice?.deviceId} onChange={e => onSelect(devices.find(d => d.deviceId === e.target.value))}>
                 {devices.map(device => (
                     <option
                         key={device.deviceId}
@@ -147,7 +197,7 @@ const DeviceSelector: React.FC<DeviceSelectorProps> = React.memo(({ label, curre
                 ))}
                 {devices.length === 0 ? (<option>選択可能なデバイスがありません</option>) : ""}
             </select>
-        </>
+        </div>
     )
 })
 

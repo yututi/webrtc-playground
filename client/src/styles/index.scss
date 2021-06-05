@@ -19,7 +19,7 @@ body {
     --on-background: white;
     --primary: #ec821f;
     --on-primary: #ffffff;
-    --secondary: #ff4e65;
+    --secondary: #495883;
     --on-secondary: #ffffff;
     --surface: #fffbef;
     --on-surface: #333333;
@@ -100,6 +100,10 @@ body,
 .action-btns {
     display: flex;
     justify-content: flex-end;
+
+    & > *:not(:first-child) {
+        margin-left: 6px;
+    }
 }
 
 .mt-1 {
@@ -155,6 +159,10 @@ body,
     --component-color: var(--secondary);
     --on-component-color: var(--on-secondary);
 }
+.white {
+    --component-color: white;
+    --on-component-color: transparent;
+}
 
 /* TODO: あとでコンポーネント化 */
 input[type="text"] {
@@ -172,7 +180,8 @@ input[type="text"]:focus {
     border-color: var(--error);
 }
 button {
-    border: 1px solid var(--component-color);
+    // border: 1px solid var(--component-color);
+    border: none;
     background-color: var(--component-color);
     color: var(--on-component-color);
     padding: 6px;
@@ -185,4 +194,13 @@ button.is-error {
     border: 1px solid var(--error);
     background-color: var(--error);
     color: var(--on-error);
+}
+
+select {
+    padding: 4px;
+    background-color: transparent;
+    border-radius: 999px;
+    border: 1px solid var(--primary);
+    outline: none;
+    color: var(--primary);
 }

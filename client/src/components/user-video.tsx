@@ -13,11 +13,11 @@ const User: React.FC = () => {
 
     useEffect(() => {
         videoRef.current.srcObject = stream
-        videoRef.current.volume = 0
+        videoRef.current.volume = 0.5
     }, [stream])
 
     return (
-        <div className="user">
+        <div className="user video">
             <video className="user__video" ref={videoRef} autoPlay></video>
             <div className="user__video-overlay">
                 {name}

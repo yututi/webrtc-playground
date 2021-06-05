@@ -1,11 +1,25 @@
 @import "~styles/media.scss";
 
-.device-types {
-    display: flex;
+.device-selectors {
+    & > *:not(:first-child) {
+        margin-top: 6px;
+    }
+}
+
+.device-select {
+    display:flex;
+
+    &__label {
+        width: 150px;
+    }
+
+    &__select {
+        flex: 1;
+    }
 }
 
 .my-video {
-    position: absolute;
+    position: fixed;
     bottom: 8px;
     border: 1px solid gainsboro;
     border-radius: 8px;

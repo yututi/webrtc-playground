@@ -115,11 +115,16 @@ export const UserProvider: React.FC<Props> = ({ user, children }) => {
         }
     }, [user.id, socket])
 
-    const { camera, audioIn } = useCurrentDeviceContext()
+    const { camera, audioIn, isAudioMute, isVideoMute } = useCurrentDeviceContext()
 
     useEffect(() => {
         p2p.setDevice({ videoDeviceId: camera.deviceId, audioDeviceId: audioIn.deviceId })
     }, [camera, audioIn, user.id, p2p])
+
+    useEffect(() => {
+        p2p.audioMute = isAudioMute
+        p2p.videoMute = isVideoMute
+    }, [p2p, isAudioMute, isVideoMute])
 
     const value = {
         isConnected: isRtcConnected,

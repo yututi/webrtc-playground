@@ -5,8 +5,8 @@ import { useCurrentDeviceContext } from "modules/current-device"
 import "./my-video.scss"
 import IconBtn from "components/icon-btn"
 import {
-    faArrowCircleUp,
-    faArrowCircleDown,
+    faAngleUp,
+    faAngleDown,
     faVolumeMute,
     faVolumeUp,
     faVideo,
@@ -22,9 +22,9 @@ const MyVideo: React.VFC = () => {
         <div className={`my-video ${isOpen ? "my-video--is-open" : ""}`}>
             <div className="my-video__box box">
                 <div className="box__opener">
-                    <IconBtn 
-                        icon={isOpen ? faArrowCircleDown : faArrowCircleUp} 
-                        color="secondary" 
+                    <IconBtn
+                        icon={isOpen ? faAngleDown : faAngleUp}
+                        color="secondary"
                         onClick={() => setIsOpen(!isOpen)}
                     />
                 </div>

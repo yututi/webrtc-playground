@@ -5,6 +5,7 @@ import { useMeContext } from "./me"
 import { useDeviceContext } from "./devices"
 import { useCurrentDeviceContext } from "./current-device"
 import { P2PVideo } from "./P2PVideo"
+import { VIDEO } from "modules/const"
 
 
 type UserState = {
@@ -45,7 +46,7 @@ export const UserProvider: React.FC<Props> = ({ user, children }) => {
 
     const { name: myName } = useMeContext()
 
-    const p2p = useMemo(() => new P2PVideo(300, 500), [user.id, socket])
+    const p2p = useMemo(() => new P2PVideo(VIDEO.HEIGHT, VIDEO.WIDTH), [user.id, socket])
     // const connection = useMemo(() => new RTCPeerConnection({ 'iceServers': [{ 'urls': 'stun:stun.l.google.com:19302' }] }), [user.id, socket])
 
     useEffect(() => {

@@ -1,0 +1,21 @@
+.user {
+    position: relative;
+    background-color: var(--surface);
+    color: var(--on-surface);
+    border: 2px solid var(--primary);
+    border-radius: 4px;
+    overflow: hidden;
+
+    &__name {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        padding: 6px;
+    }
+
+    &__actions {
+        position: absolute;
+        bottom: 16px;
+        right: 16px;
+    }
+}

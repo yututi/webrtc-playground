@@ -72,11 +72,15 @@
     padding-top: 75%;
     position: relative;
 }
-.video > video {
+.video > .video__inner,
+video {
     position: absolute;
     top: 0;
     left: 0;
     bottom: 0;
     right: 0;
     width: 100%;
+    object-fit: fill;
+    display: block;
+    height: 100%;
 }

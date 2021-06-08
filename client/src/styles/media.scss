@@ -8,3 +8,19 @@
         @content;
     }
 }
+
+@mixin lg {
+    @media only screen and (min-width: 1501px) {
+        @content;
+    }
+}
+@mixin md {
+    @media only screen and (max-width: 1500px) and (min-width: 799px) {
+        @content;
+    }
+}
+@mixin sm {
+    @media only screen and (max-width: 799px) {
+        @content;
+    }
+}

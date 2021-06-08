@@ -1,0 +1,25 @@
+@import "~styles/media.scss";
+
+.users {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 16px;
+
+    &__user {
+        @include sm {
+            width: 100%;
+        }
+
+        @include md {
+            width: 50%;
+        }
+
+        @include lg {
+            width: 25%;
+            max-width: 500px;
+        }
+        padding: 6px;
+    }
+}

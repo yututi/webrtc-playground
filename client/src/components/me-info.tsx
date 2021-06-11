@@ -1,49 +1,51 @@
 import { useMeContext } from "modules/me"
 import Dialog from "components/dialog"
 import { useState } from "react"
+import { useAppSelector, useAppDispatch } from "redux/hooks"
+import { selectIsRoomJoined } from "redux/slices/current-room"
+import { setUserName } from "redux/slices/global"
 
 const MeInfo = () => {
 
-    const { name, setName } = useMeContext()
+  const userName = useAppSelector(state => state.global.userName)
 
-    return (
-        <>
-            <div className="user-name">
-                {name}
-            </div>
-            <UserDialog 
-                onUserNameDefined={setName} 
-                defaultName={name}
-            />
-        </>
-    )
+  return (
+    <>
+      <div className="user-name">
+        {userName}
+      </div>
+      <UserDialog
+        defaultName={userName}
+      />
+    </>
+  )
 }
 
 type DialogProps = {
-    onUserNameDefined: (name: string) => void
-    defaultName: string
+  defaultName: string
 }
 
-const UserDialog: React.FC<DialogProps> = ({ onUserNameDefined, defaultName }) => {
+const UserDialog: React.FC<DialogProps> = ({ defaultName }) => {
 
-    const [isDefined, setIsDefined] = useState(false)
+  const dispatch = useAppDispatch()
 
-    const [name, setName] = useState("")
+  const [isDefined, setIsDefined] = useState(false)
 
-    const onDefined = () => {
-        console.log("ondef")
-        onUserNameDefined(name || defaultName)
-        setIsDefined(true)
-    }
+  const [name, setName] = useState("")
 
-    return (
-        <Dialog dialogTitle="ユーザ名" isOpen={!isDefined} close={onDefined}>
-            <input type="text" placeholder={defaultName} value={name} onChange={e => setName(e.target.value)} />
-            <div className="action-btns mt-1">
-                <button className="btn" onClick={onDefined}>OK</button>
-            </div>
-        </Dialog>
-    )
+  const onDefined = () => {
+    dispatch(setUserName(name || defaultName))
+    setIsDefined(true)
+  }
+
+  return (
+    <Dialog dialogTitle="ユーザ名" isOpen={!isDefined} close={onDefined}>
+      <input type="text" placeholder={defaultName} value={name} onChange={e => setName(e.target.value)} />
+      <div className="action-btns mt-1">
+        <button className="btn" onClick={onDefined}>OK</button>
+      </div>
+    </Dialog>
+  )
 }
 
 export default MeInfo

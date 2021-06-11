@@ -1,24 +1,32 @@
-import React, { CSSProperties, useEffect, useRef } from "react";
-import { useRoomsContext } from "modules/rooms"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faUsers } from "@fortawesome/free-solid-svg-icons"
-import { useUserContext } from "modules/users";
+import React, { useEffect, useRef } from "react";
 import "./user-video.scss"
+import { UserWithOffer } from "types";
+import { useP2PConnect } from "hooks/p2p-connect";
+import { useAppSelector } from "redux/hooks";
 
-type Props = {
+
+type Props = { 
+  user: UserWithOffer
 }
 
-const User: React.VFC<Props> = ({  }) => {
-
-    const { name, stream } = useUserContext()
+const User: React.VFC<Props> = ({user}) => {
 
     const videoRef = useRef<HTMLVideoElement>(null)
 
-    useEffect(() => {
-        videoRef.current.srcObject = stream
-        videoRef.current.volume = 0.5
-    }, [stream])
+    const localUseName = useAppSelector(state => state.global.userName)
 
+    const {
+      remoteUserName,
+      p2p
+    } = useP2PConnect(
+      user,
+      localUseName,
+    )
+
+    useEffect(() => {
+        videoRef.current.srcObject = p2p.stream
+        videoRef.current.volume = 0.5
+    }, [p2p])
 
     return (
         <div className="user video">
@@ -30,10 +38,10 @@ const User: React.VFC<Props> = ({  }) => {
                 />
             </div>
             <div className="user__actions action-btns">
-                {name}
+                {}
             </div>
             <div className="user__name">
-                {name}
+                {remoteUserName}
             </div>
         </div>
     )

@@ -14,4 +14,9 @@ button.icon-btn {
         background-color: transparent;
         color: var(--component-color);
     }
+
+    &--is-sm {
+      width: 24px;
+      height: 24px;
+    }
 }

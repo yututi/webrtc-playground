@@ -2,11 +2,8 @@ import React from "react"
 import ReactDOM from 'react-dom';
 import './styles/index.scss';
 import App from './App';
-import { MeProvider } from "modules/me"
-import { RoomsProvider } from "modules/rooms"
-import { RoomProvider } from "modules/current-room"
-import { CurrentDeviceProvider } from "modules/current-device"
-import { DeviceProvider } from "modules/devices";
+import { Provider } from 'react-redux';
+import { store } from "redux/store"
 
 const composeWrappers = (
   wrappers: React.FC[]
@@ -16,19 +13,12 @@ const composeWrappers = (
   });
 }
 
-const RootProvider = composeWrappers([
-  props => <MeProvider>{props.children}</MeProvider>,
-  props => <RoomsProvider>{props.children}</RoomsProvider>,
-  props => <RoomProvider>{props.children}</RoomProvider>,
-  props => <CurrentDeviceProvider>{props.children}</CurrentDeviceProvider>,
-  props => <DeviceProvider>{props.children}</DeviceProvider>
-])
 
 ReactDOM.render(
   <React.StrictMode>
-    <RootProvider>
+    <Provider store={store}>
       <App />
-    </RootProvider>
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );

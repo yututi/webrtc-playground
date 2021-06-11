@@ -1,3 +1,5 @@
+import P2PApiFacade from "modules/P2PApiFacade"
+
 export type UserWithOffer = {
   id: string
   name: string
@@ -9,7 +11,7 @@ export type User = {
 }
 export type Room = {
   name: string
-  users: User[]
+  users: number
 }
 export type UserWithRoom = {
   // room name
@@ -25,4 +27,14 @@ export type AnswerInfo = {
   from: string
   name: string
   answer: RTCSessionDescriptionInit
+}
+export type UserWithP2PInfo = {
+  id: string
+  name: string
+  p2p: P2PApiFacade
+}
+export type OfferInfo = {
+  from: string
+  offer?: RTCSessionDescriptionInit
+  name: string
 }

@@ -19,7 +19,6 @@ export interface DeviceState {
   isAudioMute: boolean
   isDeviceAccessPermitetd: boolean
   availableDevices: AvailableDeviceInfo
-
 }
 
 const initialState: DeviceState = {
@@ -100,20 +99,27 @@ export const updateDevices = (): AppThunk => (
   })
 }
 
-export const initDevices = (): AppThunk => (
+export const initDevices = (): AppThunk<Promise<boolean>> => (
   dispatch,
   getState
 ) => {
-  if (!getState().devices.isDeviceAccessPermitetd) {
-    navigator.mediaDevices.getUserMedia({
-      video: true,
-      audio: true
-    }).then(() => {
-      dispatch(setDeviceAccessPermit(true))
-    }).catch(e => {
-      dispatch(setDeviceAccessPermit(false))
-    })
-  }
+  return new Promise(resolve => {
+    if (!getState().devices.isDeviceAccessPermitetd) {
+      navigator.mediaDevices.getUserMedia({
+        video: true,
+        audio: true
+      }).then(() => {
+        dispatch(setDeviceAccessPermit(true))
+        dispatch(updateDevices())
+        resolve(true)
+      }).catch(e => {
+        dispatch(setDeviceAccessPermit(false))
+        resolve(false)
+      })
+    }
+    else return true
+  })
+
 }
 
 export default slice.reducer

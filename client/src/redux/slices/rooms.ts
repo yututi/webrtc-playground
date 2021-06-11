@@ -1,26 +1,13 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { RootState, AppThunk } from "redux/store"
-import { User, Room } from "types"
+import { Room, UserWithRoom } from "types"
 
 export interface RoomsState {
   rooms: Room[]
-  roomIdToRoom: { [key: string]: string }
 }
 
 const initialState: RoomsState = {
-  rooms: [],
-  roomIdToRoom: {}
-}
-
-const mapRoom = (rooms: Room[]) => {
-  return rooms.reduce((map, room) => {
-    return map[room.name] = room
-  }, {})
-}
-
-type UserWithRoom = {
-  user: User
-  room: string
+  rooms: []
 }
 
 export const roomsSlice = createSlice({
@@ -29,22 +16,23 @@ export const roomsSlice = createSlice({
   reducers: {
     addUser: (state, actions: PayloadAction<UserWithRoom>) => {
       const room = state.rooms.find(room => room.name === actions.payload.room)
-      room.users.push(actions.payload.user)
+      room.users ++
     },
     removeUser: (state, actions: PayloadAction<UserWithRoom>) => {
+      console.log({actions})
       const room = state.rooms.find(room => room.name === actions.payload.room)
-      room.users = room.users.filter(user => user.id !== actions.payload.user.id)
+      console.log({room})
+      room.users --
     },
-    addRoom: (state, actions: PayloadAction<string>) => {
-      state.rooms.push({
-        name: actions.payload,
-        users: []
-      })
-      state.roomIdToRoom = mapRoom(state.rooms)
+    addRoom: (state, actions: PayloadAction<Room>) => {
+      console.log({actions})
+      if (!actions.payload.users) actions.payload.users = 0
+      state.rooms.push(actions.payload)
+      // state.roomIdToRoom = mapRoom(state.rooms)
     },
     removeRoom: (state, actions: PayloadAction<string>) => {
       state.rooms = state.rooms.filter(room => room.name === actions.payload)
-      state.roomIdToRoom = mapRoom(state.rooms)
+      // state.roomIdToRoom = mapRoom(state.rooms)
     }
   }
 })
@@ -56,6 +44,7 @@ export const {
   removeUser
 } = roomsSlice.actions
 
-export const selectRooms = (state: RootState) => state.room
+export const selectRooms = (state: RootState) => state.rooms.rooms
+
 
 export default roomsSlice.reducer

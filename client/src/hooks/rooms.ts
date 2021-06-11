@@ -1,9 +1,9 @@
-import { useEffect } from "react"
+import { useEffect, useRef } from "react"
 import { useSocket } from "./socket"
 import { get } from "utils"
 import { Room, UserWithRoom } from "types"
 
-type RoomAddedEvent = (room: Room[]) => void
+type RoomAddedEvent = (room: Room) => void
 type RoomRemovedEvenet = (room: Room) => void
 type MemberJoinedEvent = (room: UserWithRoom) => void
 type MemberLeavedEvent = (room: UserWithRoom) => void
@@ -15,26 +15,33 @@ type UseRoomsArgs = {
   onMemberLeaved: MemberLeavedEvent
 }
 
-export const useRooms = ({
-  onRoomAdded,
-  onRoomRemoved,
-  onMemberJoined,
-  onMemberLeaved
-}: UseRoomsArgs) => {
+export default function useRooms(args: UseRoomsArgs) {
 
   const { socket } = useSocket()
+
+  const eventsRef = useRef<UseRoomsArgs>()
+  eventsRef.current = args
 
   useEffect(() => {
     get("api/rooms")
       .then(res => res.json())
-      // .then(res => { // peek
-      //   console.log(res)
-      //   return res
-      // })
-      .then(rooms => rooms.forEach(room => onRoomAdded(room))) // FIXME
-  }, [onRoomAdded])
+      .then(rooms => rooms.forEach(room => eventsRef.current.onRoomAdded(room))) // FIXME
+  }, [])
 
   useEffect(() => {
+
+    const onRoomAdded: RoomAddedEvent = room => {
+      eventsRef.current.onRoomAdded(room)
+    }
+    const onRoomRemoved: RoomRemovedEvenet = room => {
+      eventsRef.current.onRoomRemoved(room)
+    }
+    const onMemberJoined: MemberJoinedEvent = user => {
+      eventsRef.current.onMemberJoined(user)
+    }
+    const onMemberLeaved: MemberLeavedEvent = user => {
+      eventsRef.current.onMemberLeaved(user)
+    }
 
     const events = {
       "room-added": onRoomAdded,
@@ -53,5 +60,5 @@ export const useRooms = ({
       })
     }
 
-  }, [socket, onRoomAdded, onRoomRemoved, onMemberJoined, onMemberLeaved])
+  }, [socket])
 }

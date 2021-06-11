@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { RootState, AppThunk } from "redux/store"
+import { RootState } from "redux/store"
 import { UserWithOffer} from "types"
 
 export interface CurrentRoomState {

@@ -40,7 +40,7 @@ const Body = ({ children }) => {
   )
 }
 
-const Content = React.memo(() => {
+const Content = () => {
 
   const isJoinedRoom = useAppSelector(selectIsRoomJoined)
 
@@ -49,4 +49,4 @@ const Content = React.memo(() => {
       {isJoinedRoom && <Suspense fallback={false}><CurrentRoom /></Suspense>}
     </div>
   )
-})
+}

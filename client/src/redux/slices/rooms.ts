@@ -1,5 +1,5 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { RootState, AppThunk } from "redux/store"
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { RootState } from "redux/store"
 import { Room, UserWithRoom } from "types"
 
 export interface RoomsState {

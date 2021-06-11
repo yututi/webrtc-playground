@@ -1,4 +1,3 @@
-import { useEffect, useMemo, useState } from "react"
 import { io, Socket } from "socket.io-client"
 import { isDevelopment } from "utils"
 
@@ -12,29 +11,6 @@ const getScoket = (): Socket => {
 }
 
 export function useSocket() {
-
     const socket = getScoket()
-    // const [isConnected, setIsConnected] = useState(socket.connected)
-
-    // // const socket = useMemo(() => {
-    // //     return io()
-    // // }, [])
-
-    // useEffect(() => {
-    //     socket.on("connected", () => {
-    //         console.log("socket connected.")
-    //         setIsConnected(true)
-    //     })
-    //     socket.on("disconnect", () => {
-    //         // TODO 再接続すべき?
-    //         console.log("socket disconnected.")
-    //         setIsConnected(false)
-    //     })
-    //     if (socket.connected) setIsConnected(true)
-    //     return () => {
-    //         socket.close()
-    //     }
-    // }, [socket])
-
     return { socket }
 }

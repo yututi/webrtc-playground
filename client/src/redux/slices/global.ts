@@ -1,9 +1,7 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { Socket, io } from 'socket.io-client'
-import { RootState, AppThunk } from "redux/store"
-import { isDevelopment, isMobile } from "utils"
-
-const HOST = isDevelopment ? `ws://localhost:5000` : window.location
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { Socket } from 'socket.io-client'
+import { RootState } from "redux/store"
+import { isMobile } from "utils"
 
 export interface RoomsState {
   status: "idle" | "loading"

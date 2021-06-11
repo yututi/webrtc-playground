@@ -9,7 +9,7 @@ type Props = {
   isRightSide?: boolean
 }
 
-const Nav: React.FC<Props> = React.memo(({ isRightSide = false, children }) => {
+const Nav: React.FC<Props> = ({ isRightSide = false, children }) => {
 
   const isNavOpen = useAppSelector(selectIsNavOpen)
 
@@ -38,6 +38,6 @@ const Nav: React.FC<Props> = React.memo(({ isRightSide = false, children }) => {
       </nav>
     </>
   )
-})
+}
 
 export default Nav

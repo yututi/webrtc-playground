@@ -28,11 +28,11 @@ const Rooms: React.FC = React.memo(() => {
       dispatch(addUser(user))
     },
     onMemberLeaved: user => {
-      console.log("onMemberLeaved", {user})
+      console.log("onMemberLeaved", { user })
       dispatch(removeUser(user))
     },
     onRoomAdded: room => {
-      console.log({room})
+      console.log({ room })
       dispatch(addRoom(room))
     },
     onRoomRemoved: room => {

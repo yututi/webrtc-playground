@@ -1,4 +1,4 @@
-import { VIDEO } from "modules/const"
+import { VIDEO } from "const"
 
 // extends interfece of HTMLCanvasElement because captureStream is still draft.
 interface CanvasElement extends HTMLCanvasElement {

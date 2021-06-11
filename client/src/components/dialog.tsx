@@ -35,7 +35,7 @@ const Dialog: React.FC<Props> = ({ children, isOpen, dialogTitle, close }) => {
           <div className="dialog__header">
             <div className="dialog__title">{dialogTitle}</div>
             <div className="spacer"></div>
-            {close ? <IconBtn color="secondary" onClick={close} className="dialog__header-icon" icon={faTimes} reverse /> : ""}
+            {close ? <IconBtn small iconSize="lg" color="secondary" onClick={close} className="dialog__header-icon" icon={faTimes} reverse /> : ""}
           </div>
           <div className="dialog__body">
             {children}

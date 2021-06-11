@@ -1,12 +1,12 @@
-import React from "react"
+import React, { Suspense } from "react"
 import Rooms from "components/rooms"
-import CurrentRoom from "components/current-room"
 import Header from "components/header"
 import Nav from "components/nav"
 import { classMap } from "utils"
 import { useAppSelector } from "redux/hooks"
 import { selectIsRoomJoined } from "redux/slices/current-room"
 import { selectIsNavOpen } from "redux/slices/global"
+const CurrentRoom = React.lazy(() => import("components/current-room"))
 
 export default function App() {
 
@@ -46,8 +46,7 @@ const Content = React.memo(() => {
 
   return (
     <div className="body__content">
-      {/* TODO Suspense */}
-      {isJoinedRoom && <CurrentRoom />}
+      {isJoinedRoom && <Suspense fallback={false}><CurrentRoom /></Suspense>}
     </div>
   )
 })

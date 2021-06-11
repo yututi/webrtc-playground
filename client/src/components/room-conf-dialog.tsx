@@ -1,12 +1,7 @@
 import React, { useRef, useState } from "react";
 import Dialog from "components/dialog"
-import { useRoomsContext } from "modules/rooms";
 import { classMap } from "utils"
-import { useAppDispatch } from "redux/hooks";
-import {
-  addRoom
-} from "redux/slices/rooms"
-import { useSocket } from "modules/socket";
+import { useSocket } from "hooks/socket";
 
 type Props = {
   isOpen: boolean
@@ -37,12 +32,13 @@ const RoomConfigDialog: React.FC<Props> = ({ isOpen, close }) => {
   }
 
   return (
-    <Dialog dialogTitle="Type your room name" isOpen={isOpen} close={close}>
+    <Dialog dialogTitle="ルーム設定" isOpen={isOpen} close={close}>
       <form ref={form} className={`form ${classMap({ checked: hasError })}`}>
         <input
           type="text"
           value={name}
           required
+          placeholder="部屋名"
           onChange={onChange}
         />
         <div className="action-btns mt-1">

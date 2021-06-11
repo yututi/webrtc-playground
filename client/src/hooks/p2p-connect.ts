@@ -1,8 +1,8 @@
-import React, { createContext, useEffect, useState, useContext, useMemo } from "react"
-import { User, UserWithOffer, CandidateInfo, AnswerInfo } from "types"
+import { useEffect, useState, useMemo } from "react"
+import { UserWithOffer } from "types"
 import { useSocket } from "./socket"
 import { P2PVideo } from "modules/P2PVideo"
-import { VIDEO } from "modules/const"
+import { VIDEO } from "const"
 import P2PConnector from "modules/P2PConnector"
 
 export const useP2PConnect = (remoteUser: UserWithOffer, localUserName: string) => {

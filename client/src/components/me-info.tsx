@@ -1,8 +1,7 @@
-import { useMeContext } from "modules/me"
+
 import Dialog from "components/dialog"
 import { useState } from "react"
 import { useAppSelector, useAppDispatch } from "redux/hooks"
-import { selectIsRoomJoined } from "redux/slices/current-room"
 import { setUserName } from "redux/slices/global"
 
 const MeInfo = () => {

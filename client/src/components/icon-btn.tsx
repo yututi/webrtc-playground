@@ -26,7 +26,7 @@ const IconBtn: React.VFC<Props & JSX.IntrinsicElements['button']> = React.memo((
 
   return (
     <button {...btnProps} className={classes}>
-      <FontAwesomeIcon size={iconSize} icon={icon}></FontAwesomeIcon>
+      <span><FontAwesomeIcon size={iconSize} icon={icon}></FontAwesomeIcon></span>
       {text}
     </button>
   )

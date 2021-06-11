@@ -40,7 +40,7 @@ const CurrentRoom: React.VFC = () => {
           name: "-"
         }
       })
-      console.log({userInfos})
+      console.log({ userInfos })
       dispatch(addUsers(userInfos))
     }
   })

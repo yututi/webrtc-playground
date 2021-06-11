@@ -1,52 +1,62 @@
-.modal, .presentation {
-    position: fixed;
-    top: 0px;
-    left: 0px;
-    right: 0px;
-    bottom: 0px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: transparent;
-    opacity: 0;
-    transition: opacity 0.3s;
+@import "~styles/media.scss";
 
-    &--is-open {
-        opacity: 1;
-    }
+.modal, .presentation {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+  opacity: 0;
+  transition: opacity 0.3s;
+
+  &--is-open {
+    opacity: 1;
+  }
 }
 
 .modal {
-    background-color: black;
+  background-color: black;
 
-    &--is-open {
-        opacity: 0.2;
-    }
+  &--is-open {
+    opacity: 0.2;
+  }
 }
 
 .dialog {
-    max-height: 100%;
-    padding: 1em;
-    background-color: var(--surface);
-    color: var(--on-surface);
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,.3);
+  max-height: 100%;
+  padding: 1em;
+  background-color: var(--surface);
+  color: var(--on-surface);
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,.3);
 
-    &__header {
-        display: flex;
-        align-items: center;
-    }
+  @include sp {
+    width: 100%;
+  }
 
-    &__body {
-        margin-top: 1em;
-    }
+  &__header {
+    display: flex;
+    align-items: center;
+  }
 
-    &__header-icon {
-        font-size: 20px;
-        cursor: pointer;
-    }
+  &__title {
+    font-weight: 600;
+  }
+
+  &__body {
+    margin-top: 1em;
+  }
+
+  &__header-icon {
+    font-size: 20px;
+    cursor: pointer;
+  }
 }
 
 .title {
-    font-size: 1.5em;
+  font-size: 1.5em;
 }

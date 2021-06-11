@@ -1,86 +1,85 @@
 @import "~styles/media.scss";
 
 .device-selectors {
-    & > *:not(:first-child) {
-        margin-top: 6px;
-    }
+  & > *:not(:first-child) {
+    margin-top: 6px;
+  }
 }
 
 .device-select {
-    display:flex;
+  display: flex;
 
-    &__label {
-        width: 150px;
-    }
+  &__label {
+    width: 150px;
+  }
 
-    &__select {
-        flex: 1;
-    }
+  &__select {
+    flex: 1;
+  }
 }
 
 .my-video {
-    position: fixed;
-    bottom: 8px;
-    border: 1px solid gainsboro;
-    border-radius: 8px;
-    transition: transform 0.3s;
+  position: fixed;
+  bottom: 8px;
+  border: 1px solid gainsboro;
+  border-radius: 8px;
+  transition: transform 0.3s;
 
-    transform: translateY(100%);
+  transform: translateY(100%);
 
-    &--is-open {
-        transform: translateY(0px);
-    }
+  &--is-open {
+    transform: translateY(0px);
+  }
 
-    @include sp {
-        bottom: 0px;
-        left: 0px;
-        right: 0px;
-    }
+  @include sp {
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+  }
 
-    @include pc {
-        right: 10px;
-        width: 400px;
-    }
+  @include pc {
+    right: 10px;
+    width: 400px;
+  }
 }
 
 .box {
-    position: relative;
-    border-radius: inherit;
-    padding: 8px;
+  position: relative;
+  border-radius: inherit;
+  padding: 8px;
+  background-color: var(--secondary);
+  color: var(--on-secondary);
+
+  &__btns {
+    position: absolute;
+    bottom: 16px;
+    right: 16px;
+  }
+
+  &__opener {
+    border-top-left-radius: 999px;
+    border-top-right-radius: 999px;
+    position: absolute;
+    top: -40px;
     background-color: var(--secondary);
     color: var(--on-secondary);
-
-    &__btns {
-        position: absolute;
-        bottom: 16px;
-        right: 16px;
-    }
-
-    &__opener {
-        border-top-left-radius: 999px;
-        border-top-right-radius: 999px;
-        position: absolute;
-        top: -40px;
-        background-color: var(--secondary);
-        color: var(--on-secondary);
-
-    }
+  }
 }
 
 .video {
-    width: 100%;
-    padding-top: 75%;
-    position: relative;
+  width: 100%;
+  padding-top: 75%;
+  position: relative;
 }
 .video > .video__inner,
 video {
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    width: 100%;
-    object-fit: fill;
-    display: block;
-    height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  object-fit: fill;
+  display: block;
+  height: 100%;
 }

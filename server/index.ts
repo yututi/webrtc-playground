@@ -135,15 +135,19 @@ io.of("/").adapter.on("delete-room", (roomId) => {
 });
 io.of("/").adapter.on("join-room", (room, id) => {
   console.log(`socket ${id} has joined room ${room}`);
-  io.emit("member-joined", {
-    room: room,
-    user: id
-  })
+  if (room !== id) {
+    io.emit("member-joined", {
+      room: room,
+      user: id
+    })
+  }
 });
 io.of("/").adapter.on("leave-room", (room, id) => {
   console.log(`socket ${id} has leaved room ${room}`);
-  io.emit("member-leaved", {
-    room: room,
-    user: id
-  })
+  if (room !== id) {
+    io.emit("member-leaved", {
+      room: room,
+      user: id
+    })
+  }
 })

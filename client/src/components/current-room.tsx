@@ -1,28 +1,30 @@
 import React from "react";
 import User from "components/user-video"
-import MyVideo from "components/my-video"
+import MyVideo from "components/own-video"
 import "./current-room.scss"
 import { useAppDispatch, useAppSelector } from "redux/hooks"
 import {
   leaveRoom,
   addUser,
   removeUserById,
-  addUsers
+  addUsersWithoutMyOwn
 } from "redux/slices/current-room"
 import useCurrentRoom from "hooks/current-room";
+import { useHistory, useParams } from "react-router-dom";
+import B2HBtn from "./back-to-home-btn";
 
 
 const CurrentRoom: React.VFC = () => {
 
   const dispatch = useAppDispatch();
 
-  const {
-    room,
-    users
-  } = useAppSelector(root => root.currentRoom)
+  const { roomId } = useParams<{ roomId: string }>()
+
+  const room = useAppSelector(root => root.currentRoom.room)
+  const users = useAppSelector(root => root.currentRoom.users)
 
   useCurrentRoom({
-    room,
+    roomId,
     onMemberJoined: user => {
       dispatch((addUser({
         id: user.from,
@@ -41,16 +43,31 @@ const CurrentRoom: React.VFC = () => {
         }
       })
       console.log({ userInfos })
-      dispatch(addUsers(userInfos))
+      dispatch(addUsersWithoutMyOwn(userInfos))
     }
   })
 
+  const history = useHistory()
+
+  // urlに直接部屋IDをいれた場合やリロードした場合、roomがnullになる。
+  // 再入室は難易度が高いのでトップページに戻す
+  // TODO 再入室する方法を考える
+  if (!room) {
+
+    setTimeout(() => {
+      history.push("/")
+    })
+
+    return (
+      <div></div>
+    )
+  }
+
   return (
-    <div className="current-room">
+    <div className="card current-room">
       <div className="current-room__header flex is-align-center">
-        <span>{room.name}</span>
-        <div className="spacer"></div>
-        <button onClick={() => dispatch(leaveRoom())}>Leave</button>
+        <B2HBtn text="退出"></B2HBtn>
+        <span className="current-room__title ml-1">{room.name}</span>
       </div>
       <div className="current-room__users users">
         {users.map(user => {

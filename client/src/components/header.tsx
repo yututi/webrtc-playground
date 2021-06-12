@@ -1,20 +1,23 @@
 import MeInfo from "components/me-info"
 import "./header.scss"
 import IconBtn from "components/icon-btn"
-import { faHamburger } from "@fortawesome/free-solid-svg-icons"
+import { faBars } from "@fortawesome/free-solid-svg-icons"
 import { useAppDispatch } from "redux/hooks"
 import { toggleNavOpen } from "redux/slices/global"
+import { useHistory } from "react-router-dom"
 
 type Props = {
   title: string,
 }
 const Header: React.FC<Props> = ({ title }) => {
 
+  const history = useHistory()
+
   return (
     <div className="header">
       <div className="header__left">
         <NavToggler></NavToggler>
-        <span className="header__title">{title}</span>
+        <span className="header__title" onClick={() => history.push("/")}>{title}</span>
       </div>
       <div className="spacer"></div>
       <div className="header__right">
@@ -29,7 +32,7 @@ const NavToggler = () => {
   const dispatch = useAppDispatch()
 
   return (
-    <IconBtn icon={faHamburger} onClick={() => dispatch(toggleNavOpen())} />
+    <IconBtn iconSize="lg" icon={faBars} onClick={() => dispatch(toggleNavOpen())} />
   )
 }
 

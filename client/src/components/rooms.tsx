@@ -14,6 +14,7 @@ import {
 } from "redux/slices/rooms"
 import { joinRoom } from "redux/slices/current-room"
 import useRooms from "hooks/rooms";
+import { useHistory } from "react-router-dom";
 
 const RoomAdder = React.lazy(() => import("components/room-adder"))
 
@@ -59,8 +60,11 @@ const RoomComponent: React.FC<Props> = ({ room }) => {
 
   const dispatch = useAppDispatch()
 
+  const history = useHistory()
+
   const onClick = () => {
     dispatch(joinRoom(room))
+    history.push(`/rooms/${room.id}`)
   }
 
   return (

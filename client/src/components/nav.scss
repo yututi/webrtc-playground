@@ -23,6 +23,7 @@
   bottom: 0px;
   left: -100%;
   position: absolute;
+  background-color: transparent;
 
   transition: left 0.3s, right 0.3s;
 
@@ -32,6 +33,8 @@
 
   @include sp {
     position: fixed;
+    background-color: var(--surface);
+    color: var(--on-surface);
   }
 
   &.is-open {

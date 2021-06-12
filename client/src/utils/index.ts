@@ -1,5 +1,3 @@
-import { StringifyOptions } from "querystring"
-
 export const isDevelopment = process.env.NODE_ENV !== "production"
 
 export function classMap(obj: { [key: string]: any }): string {

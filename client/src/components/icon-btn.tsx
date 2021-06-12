@@ -21,13 +21,14 @@ const IconBtn: React.VFC<Props & JSX.IntrinsicElements['button']> = React.memo((
     "icon-btn hl flex is-align-center",
     color,
     reverse && "icon-btn--is-reverse",
-    `icon-btn--is-${size}`
+    `icon-btn--is-${size}`,
+    !!text && "icon-btn--is-square btn"
   ].filter(Boolean).join(" ")
 
   return (
     <button {...btnProps} className={classes}>
       <span><FontAwesomeIcon size={iconSize} icon={icon}></FontAwesomeIcon></span>
-      {text}
+      {text && <span className="ml-1">{text}</span>}
     </button>
   )
 })

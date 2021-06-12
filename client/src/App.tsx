@@ -2,17 +2,20 @@ import React, { Suspense } from "react"
 import Rooms from "components/rooms"
 import Header from "components/header"
 import Nav from "components/nav"
+import NewRoom from "components/new-room"
 import { useAppSelector } from "redux/hooks"
-import { selectIsRoomJoined } from "redux/slices/current-room"
 import { selectIsNavOpen } from "redux/slices/global"
+import { Route, Switch, Link } from 'react-router-dom';
+
 const CurrentRoom = React.lazy(() => import("components/current-room"))
+
 
 export default function App() {
 
   return (
     <main className="main flex is-vertical">
       <Header
-        title="WebRTC Playground"
+        title="⚡️ WebRTC Playground"
       />
       <Body>
         <Content />
@@ -42,11 +45,24 @@ const Body = ({ children }) => {
 
 const Content = () => {
 
-  const isJoinedRoom = useAppSelector(selectIsRoomJoined)
-
   return (
     <div className="body__content">
-      {isJoinedRoom && <Suspense fallback={false}><CurrentRoom /></Suspense>}
+      <Suspense fallback={false}>
+        <Switch>
+          <Route exact path="/" component={Empty} />
+          <Route path="/rooms/:roomId" component={CurrentRoom} />
+          <Route path="/newroom" component={NewRoom} />
+        </Switch>
+      </Suspense>
+    </div>
+  )
+}
+
+const Empty = () => {
+
+  return (
+    <div className="card emptypage">
+      <span>↖️メニューを開いて部屋を選択<br />または、<Link to="/newroom">新しく部屋を作成</Link></span>
     </div>
   )
 }

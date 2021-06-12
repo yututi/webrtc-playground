@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react"
 import Dialog from "components/dialog"
-import "./my-video.scss"
+import "./own-video.scss"
 import IconBtn from "components/icon-btn"
 import {
   faAngleUp,
@@ -20,11 +20,11 @@ import {
   setVideoMute,
   setVideo
 } from "redux/slices/devices"
+import { toggleOwnVideo } from "redux/slices/current-room"
 
 const MyVideo: React.VFC = () => {
 
-  const [isOpen, setIsOpen] = useState(true)
-
+  const isOpen = useAppSelector(state => state.currentRoom.isOwnVideoOpen)
   const dispatch = useAppDispatch()
   useEffect(() => {
     dispatch(initDevices)
@@ -32,15 +32,8 @@ const MyVideo: React.VFC = () => {
   }, [])
 
   return (
-    <div className={`my-video ${isOpen ? "my-video--is-open" : ""}`}>
+    <div className={`my-video card ${isOpen ? "my-video--is-open" : ""}`}>
       <div className="my-video__box box">
-        <div className="box__opener">
-          <IconBtn
-            icon={isOpen ? faAngleDown : faAngleUp}
-            color="secondary"
-            onClick={() => setIsOpen(!isOpen)}
-          />
-        </div>
         <Video></Video>
         <VideoActions></VideoActions>
       </div>
@@ -116,8 +109,20 @@ const VideoActions = React.memo(() => {
   const onAudioIconClick = useCallback(() => dispatch(setAudioMute(!isAudioMute)), [dispatch, isAudioMute])
   const onVideoIconClick = useCallback(() => dispatch(setVideoMute(!isVideoMute)), [dispatch, isVideoMute])
 
+  const isOwnVideoOpen = useAppSelector(state => state.currentRoom.isOwnVideoOpen)
+
+  const onOwnVideoTogglerClick = useCallback(() => {
+    dispatch(toggleOwnVideo())
+  }, [dispatch])
+
   return (
     <div className="box__btns action-btns">
+      <IconBtn
+        icon={isOwnVideoOpen ? faAngleDown : faAngleUp}
+        color="secondary"
+        onClick={onOwnVideoTogglerClick}
+      />
+      <div className="spacer"></div>
       <IconBtn
         iconSize="lg"
         icon={faCog}

@@ -21,11 +21,10 @@
 .my-video {
   position: fixed;
   bottom: 8px;
-  border: 1px solid gainsboro;
   border-radius: 8px;
-  transition: transform 0.3s;
+  transition: transform 0.13s ease-in-out;
 
-  transform: translateY(100%);
+  transform: translateY(calc(100% - 42px));
 
   &--is-open {
     transform: translateY(0px);
@@ -46,23 +45,16 @@
 .box {
   position: relative;
   border-radius: inherit;
-  padding: 8px;
+  padding: 4px;
   background-color: var(--secondary);
   color: var(--on-secondary);
 
   &__btns {
     position: absolute;
-    bottom: 16px;
-    right: 16px;
-  }
-
-  &__opener {
-    border-top-left-radius: 999px;
-    border-top-right-radius: 999px;
-    position: absolute;
-    top: -40px;
-    background-color: var(--secondary);
-    color: var(--on-secondary);
+    top: 0px;
+    left: 0px;
+    padding: 8px;
+    width: 100%;
   }
 }
 

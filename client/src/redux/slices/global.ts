@@ -5,6 +5,7 @@ import { isMobile } from "utils"
 export interface RoomsState {
   status: "idle" | "loading"
   errors: string[]
+  userId: string // socket.ioから払いだされるソケットID
   userName: string
   isUserNameDefined: boolean,
   isNavOpen: boolean
@@ -13,6 +14,7 @@ export interface RoomsState {
 const initialState: RoomsState = {
   status: "idle",
   errors: [],
+  userId: null,
   userName: "Guest",
   isUserNameDefined: false,
   isNavOpen: !isMobile
@@ -32,12 +34,16 @@ export const slice = createSlice({
     toggleNavOpen: (state, action: PayloadAction<void>) => {
       state.isNavOpen = !state.isNavOpen
     },
+    setUserId: (state, action: PayloadAction<string>) => {
+      state.userId = action.payload
+    },
   }
 })
 export const {
   setLoading,
   toggleNavOpen,
-  setUserName
+  setUserName,
+  setUserId
 } = slice.actions
 
 export const selectIsLoading = (state: RootState) => state.global.status === "loading"

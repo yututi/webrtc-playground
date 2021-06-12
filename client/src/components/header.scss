@@ -4,7 +4,8 @@
   padding: 8px;
   background-color: var(--primary);
   color: var(--on-primary);
-
+  box-shadow: 0 2px 5px rgba(0,0,0,0.26);
+ 
   &__left {
     display: flex;
     align-items: center;
@@ -13,5 +14,6 @@
   &__title {
     margin-left: 8px;
     font-size: 1.5em;
+    cursor: default;
   }
 }

@@ -36,7 +36,6 @@ export default function useRooms(args: UseRoomsArgs) {
       eventsRef.current.onRoomRemoved(room)
     }
     const onMemberJoined: MemberEvent = user => {
-      console.log("member joined",{user})
       eventsRef.current.onMemberJoined(user)
     }
     const onMemberLeaved: MemberEvent = user => {

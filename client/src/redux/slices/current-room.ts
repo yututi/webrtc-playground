@@ -1,15 +1,18 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { RootState } from "redux/store"
+import { RootState, AppThunk } from "redux/store"
 import { UserWithOffer, Room } from "types"
 
+// TODO roomがpathパラメータとreduxの2重管理になっている
 export interface CurrentRoomState {
   room: Room
   users: UserWithOffer[]
+  isOwnVideoOpen: boolean
 }
 
 const initialState: CurrentRoomState = {
   users: [],
   room: null,
+  isOwnVideoOpen: false
 }
 
 type IdName = {
@@ -46,20 +49,31 @@ export const currentRoomSlice = createSlice({
       const user = state.users.find(user => user.id === action.payload.id)
       user.name = action.payload.id
     },
+    toggleOwnVideo:  (state) => {
+      state.isOwnVideoOpen = !state.isOwnVideoOpen
+    },
   }
 })
 
 export const {
-  addUser,
   removeUserById,
   leaveRoom,
   addUsers,
   updateUserNameById,
-  joinRoom
+  joinRoom,
+  toggleOwnVideo,
+  addUser
 } = currentRoomSlice.actions
 
 export const currentRooms = (state: RootState) => state.currentRoom
 
-export const selectIsRoomJoined = (state: RootState) => !!state.currentRoom.room
+export const addUsersWithoutMyOwn = (users: UserWithOffer[]): AppThunk => (
+  dispatch,
+  getState
+) => {
+  const id = getState().global.userId
+  dispatch(addUsers(users.filter(user => user.id !== id)))
+};
+
 
 export default currentRoomSlice.reducer

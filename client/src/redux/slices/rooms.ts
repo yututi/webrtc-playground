@@ -15,18 +15,20 @@ export const roomsSlice = createSlice({
   initialState,
   reducers: {
     addUser: (state, actions: PayloadAction<UserWithRoom>) => {
-      console.log({actions})
+      console.log({ actions })
       const room = state.rooms.find(room => room.id === actions.payload.room)
-      room.numberOfPeople ++
+      if (room) {
+        room.numberOfPeople++
+      }
     },
     removeUser: (state, actions: PayloadAction<UserWithRoom>) => {
-      console.log({actions})
       const room = state.rooms.find(room => room.id === actions.payload.room)
-      console.log({room})
-      room.numberOfPeople --
+      if (room) {
+        room.numberOfPeople--
+      }
     },
     addRoom: (state, actions: PayloadAction<Room>) => {
-      console.log({actions})
+      console.log({ actions })
       if (!actions.payload.numberOfPeople) actions.payload.numberOfPeople = 0
       state.rooms.push(actions.payload)
       // state.roomIdToRoom = mapRoom(state.rooms)

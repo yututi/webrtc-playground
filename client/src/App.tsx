@@ -2,7 +2,6 @@ import React, { Suspense } from "react"
 import Rooms from "components/rooms"
 import Header from "components/header"
 import Nav from "components/nav"
-import { classMap } from "utils"
 import { useAppSelector } from "redux/hooks"
 import { selectIsRoomJoined } from "redux/slices/current-room"
 import { selectIsNavOpen } from "redux/slices/global"
@@ -29,12 +28,13 @@ const Body = ({ children }) => {
 
   const isNavOpen = useAppSelector(selectIsNavOpen)
 
-  const bodyClass = classMap({
-    "body--has-left-nav": isNavOpen
-  })
+  const classes = [
+    "main__body body flex-item--grow",
+    isNavOpen && "body--has-left-nav"
+  ].filter(Boolean).join(" ")
 
   return (
-    <div className={`main__body body flex-item--grow ${bodyClass}`}>
+    <div className={classes}>
       {children}
     </div>
   )

@@ -60,7 +60,7 @@ const RoomComponent: React.FC<Props> = ({ room }) => {
   const dispatch = useAppDispatch()
 
   const onClick = () => {
-    dispatch(joinRoom(room.name))
+    dispatch(joinRoom(room))
   }
 
   return (
@@ -71,7 +71,7 @@ const RoomComponent: React.FC<Props> = ({ room }) => {
       <div className="spacer"></div>
       <div>
         <FontAwesomeIcon className="room__icon" icon={faUsers} size="1x" />
-        <span className="ml-1">{room.users}</span>
+        <span className="ml-1">{room.numberOfPeople}</span>
       </div>
     </div>
   )

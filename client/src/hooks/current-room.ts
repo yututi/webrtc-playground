@@ -1,6 +1,7 @@
 // import firebase, { store } from "modules/firebase"
 import { useEffect, useRef } from "react"
 import { useSocket } from "./socket"
+import { Room } from "types"
 
 type OfferInfo = {
   from: string
@@ -12,7 +13,7 @@ type MemberLeavedEvent = (leavedMemberId: string) => void
 type MemberJoinedEvent = (offer: OfferInfo) => void
 
 type UseRoomArgs = {
-  room: string // room name
+  room: Room
   onRoomJoined: RoomJoinedEvent,
   onMemberLeaved: MemberLeavedEvent,
   onMemberJoined: MemberJoinedEvent
@@ -20,7 +21,7 @@ type UseRoomArgs = {
 
 const useCurrentRoom = ({ room, ...args }: UseRoomArgs) => {
 
-  const { socket } = useSocket()
+  const socket = useSocket()
 
   const eventsArgs = useRef<{
     onRoomJoined: RoomJoinedEvent,
@@ -30,9 +31,9 @@ const useCurrentRoom = ({ room, ...args }: UseRoomArgs) => {
   eventsArgs.current = args
 
   useEffect(() => {
-    if (!room) return
+    if (!room || !socket) return
 
-    socket.emit("join-room", room)
+    socket.emit("join-room", room.id)
 
     const onMemberJoined: MemberJoinedEvent = (offer) => {
       eventsArgs.current.onMemberJoined(offer)
@@ -58,7 +59,7 @@ const useCurrentRoom = ({ room, ...args }: UseRoomArgs) => {
       Object.entries(events).forEach(([name, handler]) => {
         socket.off(name, handler)
       })
-      socket.emit("leave-room", room)
+      socket.emit("leave-room", room.id)
     }
   }, [room, socket])
 }

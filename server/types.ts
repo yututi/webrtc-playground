@@ -1,3 +1,3 @@
 // 型を利用する各ファイルで相対インポートしなくていいように、共通の型をここで再エクスポートする
 
-export * from "../../common/types"
+export * from "../common/types"

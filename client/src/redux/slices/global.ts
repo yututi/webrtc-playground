@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { Socket } from 'socket.io-client'
 import { RootState } from "redux/store"
 import { isMobile } from "utils"
 
@@ -7,7 +6,7 @@ export interface RoomsState {
   status: "idle" | "loading"
   errors: string[]
   userName: string
-  socket: Socket,
+  isUserNameDefined: boolean,
   isNavOpen: boolean
 }
 
@@ -15,7 +14,7 @@ const initialState: RoomsState = {
   status: "idle",
   errors: [],
   userName: "Guest",
-  socket: null,
+  isUserNameDefined: false,
   isNavOpen: !isMobile
 }
 
@@ -27,6 +26,7 @@ export const slice = createSlice({
       state.status = action.payload ? "loading" : "idle"
     },
     setUserName: (state, action: PayloadAction<string>) => {
+      state.isUserNameDefined = true
       state.userName = action.payload
     },
     toggleNavOpen: (state, action: PayloadAction<void>) => {

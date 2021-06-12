@@ -12,7 +12,7 @@ const RoomAdder: React.FC = () => {
     <>
       <div className="adder">
         <IconBtn
-          small
+          size="sm"
           iconSize="1x"
           icon={faPlus}
           onClick={() => setIsOpen(true)}

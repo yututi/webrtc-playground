@@ -10,9 +10,10 @@ type Props = {
   isOpen: boolean
   close?: () => void
   dialogTitle: string
+  closeIfOutsideClick?: boolean
 }
 
-const Dialog: React.FC<Props> = ({ children, isOpen, dialogTitle, close }) => {
+const Dialog: React.FC<Props> = ({ children, isOpen, dialogTitle, close, closeIfOutsideClick = false }) => {
 
   const {
     animationDomExists,
@@ -27,15 +28,19 @@ const Dialog: React.FC<Props> = ({ children, isOpen, dialogTitle, close }) => {
     "presentation--is-open": shouldAppendAnimationClass
   })
 
+  const onOutsideClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    if (closeIfOutsideClick && e.target === e.currentTarget) close()
+  }
+
   if (animationDomExists) return ReactDOM.createPortal(
     <>
       <div className={`modal ${modalClass}`} onTransitionEnd={onAnimationEnd}></div>
-      <div className={`presentation ${presentationClass}`}>
+      <div className={`presentation ${presentationClass}`} onClick={onOutsideClick}>
         <div className="dialog component">
           <div className="dialog__header">
             <div className="dialog__title">{dialogTitle}</div>
             <div className="spacer"></div>
-            {close ? <IconBtn small iconSize="lg" color="secondary" onClick={close} className="dialog__header-icon" icon={faTimes} reverse /> : ""}
+            {close ? <IconBtn iconSize="lg" color="secondary" onClick={close} className="dialog__header-icon" icon={faTimes} reverse /> : ""}
           </div>
           <div className="dialog__body">
             {children}

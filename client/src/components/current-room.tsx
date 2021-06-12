@@ -17,12 +17,12 @@ const CurrentRoom: React.VFC = () => {
   const dispatch = useAppDispatch();
 
   const {
-    roomName,
+    room,
     users
   } = useAppSelector(root => root.currentRoom)
 
   useCurrentRoom({
-    room: roomName,
+    room,
     onMemberJoined: user => {
       dispatch((addUser({
         id: user.from,
@@ -48,7 +48,7 @@ const CurrentRoom: React.VFC = () => {
   return (
     <div className="current-room">
       <div className="current-room__header flex is-align-center">
-        <span>{roomName}</span>
+        <span>{room.name}</span>
         <div className="spacer"></div>
         <button onClick={() => dispatch(leaveRoom())}>Leave</button>
       </div>

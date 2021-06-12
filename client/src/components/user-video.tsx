@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./user-video.scss"
 import { UserWithOffer } from "types";
 import { useP2PConnect } from "hooks/p2p-connect";
@@ -13,20 +13,25 @@ const User: React.VFC<Props> = ({ user }) => {
 
   const videoRef = useRef<HTMLVideoElement>(null)
 
-  const localUseName = useAppSelector(state => state.global.userName)
+  const localUserName = useAppSelector(state => state.global.userName)
+
+  const [volume, setVolume] = useState(0.5)
 
   const {
     remoteUserName,
-    p2p
+    stream
   } = useP2PConnect(
     user,
-    localUseName,
+    localUserName,
   )
 
   useEffect(() => {
-    videoRef.current.srcObject = p2p.stream
-    videoRef.current.volume = 0.5
-  }, [p2p])
+    videoRef.current.srcObject = stream
+  }, [stream])
+
+  useEffect(() => {
+    videoRef.current.volume = volume
+  }, [volume])
 
   return (
     <div className="user video">
@@ -38,7 +43,7 @@ const User: React.VFC<Props> = ({ user }) => {
         />
       </div>
       <div className="user__actions action-btns">
-        { }
+        <input type="range" min="0" max="1" step="0.1" onChange={e => setVolume(e.target.valueAsNumber)} />
       </div>
       <div className="user__name">
         {remoteUserName}

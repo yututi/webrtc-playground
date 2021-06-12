@@ -7,7 +7,7 @@ import { Color } from "components/types"
 type Props = {
   icon: IconProp
   iconSize?: SizeProp
-  small?: boolean
+  size?: "sm" | "lg" | "md"
   text?: string
   color?: Color
   reverse?: boolean
@@ -15,13 +15,13 @@ type Props = {
 
 const IconBtn: React.VFC<Props & JSX.IntrinsicElements['button']> = React.memo((props) => {
 
-  const { icon, text, color = "primart", iconSize = "2x", reverse = false, small = false, ...btnProps } = props
+  const { icon, text, color = "primart", iconSize = "2x", reverse = false, size = "md", ...btnProps } = props
 
   const classes = [
     "icon-btn hl flex is-align-center",
     color,
     reverse && "icon-btn--is-reverse",
-    small && "icon-btn--is-sm"
+    `icon-btn--is-${size}`
   ].filter(Boolean).join(" ")
 
   return (

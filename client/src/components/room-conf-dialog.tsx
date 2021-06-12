@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import Dialog from "components/dialog"
 import { classMap } from "utils"
-import { useSocket } from "hooks/socket";
+import {createNewRoom} from "api"
 
 type Props = {
   isOpen: boolean
@@ -15,12 +15,12 @@ const RoomConfigDialog: React.FC<Props> = ({ isOpen, close }) => {
 
   const form = useRef<HTMLFormElement>(null)
 
-  const { socket } = useSocket()
-
   const onDefined = () => {
     if (form.current.checkValidity()) {
       close()
-      socket.emit("add-room", name)
+      createNewRoom(name).then(room => {
+        console.log("room created. ",room)
+      })
     } else {
       setHasError(true)
     }
@@ -32,15 +32,20 @@ const RoomConfigDialog: React.FC<Props> = ({ isOpen, close }) => {
   }
 
   return (
-    <Dialog dialogTitle="ルーム設定" isOpen={isOpen} close={close}>
+    <Dialog dialogTitle="ルーム設定" isOpen={isOpen} close={close} closeIfOutsideClick>
       <form ref={form} className={`form ${classMap({ checked: hasError })}`}>
-        <input
-          type="text"
-          value={name}
-          required
-          placeholder="部屋名"
-          onChange={onChange}
-        />
+        <div className="field">
+          <label htmlFor="roomname" className="field__label">ルーム名</label>
+          <input
+            id="roomname"
+            className="field__input"
+            type="text"
+            value={name}
+            required
+            placeholder="ルーム名"
+            onChange={onChange}
+          />
+        </div>
         <div className="action-btns mt-1">
           <button type="button" className="btn" onClick={onDefined}>OK</button>
         </div>

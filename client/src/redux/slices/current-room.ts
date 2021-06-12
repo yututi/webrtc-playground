@@ -1,15 +1,15 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { RootState } from "redux/store"
-import { UserWithOffer} from "types"
+import { UserWithOffer, Room } from "types"
 
 export interface CurrentRoomState {
-  roomName: string
+  room: Room
   users: UserWithOffer[]
 }
 
 const initialState: CurrentRoomState = {
   users: [],
-  roomName: "",
+  room: null,
 }
 
 type IdName = {
@@ -21,11 +21,11 @@ export const currentRoomSlice = createSlice({
   name: "currentRoom",
   initialState,
   reducers: {
-    joinRoom: (state, action: PayloadAction<string>) => {
-      state.roomName = action.payload
+    joinRoom: (state, action: PayloadAction<Room>) => {
+      state.room = action.payload
     },
     leaveRoom: (state) => {
-      state.roomName = ""
+      state.room = null
       state.users = []
     },
     addUser: (state, action: PayloadAction<UserWithOffer>) => {
@@ -60,6 +60,6 @@ export const {
 
 export const currentRooms = (state: RootState) => state.currentRoom
 
-export const selectIsRoomJoined = (state: RootState) => !!state.currentRoom.roomName
+export const selectIsRoomJoined = (state: RootState) => !!state.currentRoom.room
 
 export default currentRoomSlice.reducer

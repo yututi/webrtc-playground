@@ -38,8 +38,8 @@ const UserDialog: React.FC<DialogProps> = ({ defaultName }) => {
   }
 
   return (
-    <Dialog dialogTitle="ユーザ名" isOpen={!isDefined} close={onDefined}>
-      <input type="text" placeholder={defaultName} value={name} onChange={e => setName(e.target.value)} />
+    <Dialog dialogTitle="ユーザ名" isOpen={!isDefined}>
+      <input type="text" placeholder={defaultName} onBlur={e => setName(e.target.value)} />
       <div className="action-btns mt-1">
         <button className="btn" onClick={onDefined}>OK</button>
       </div>

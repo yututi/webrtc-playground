@@ -32,7 +32,7 @@ app.get("/api/rooms", (req, res) => {
   res.status(200).json(rooms.map(room => {
     return {
       ...room,
-      numberOfPeople: roomIdToUserId.get(room.id)?.size
+      numberOfPeople: roomIdToUserId.get(room.id)?.size || 0
     }
   }))
 })

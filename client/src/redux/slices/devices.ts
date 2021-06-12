@@ -117,7 +117,7 @@ export const initDevices = (): AppThunk<Promise<boolean>> => (
         resolve(false)
       })
     }
-    else return true
+    else resolve(true)
   })
 
 }

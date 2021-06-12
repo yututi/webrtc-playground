@@ -37,6 +37,7 @@ const User: React.VFC<Props> = ({ user }) => {
   )
 
   useEffect(() => {
+    console.log("stream", stream)
     videoRef.current.srcObject = stream
   }, [stream])
 

@@ -27,7 +27,7 @@ const MyVideo: React.VFC = () => {
   const isOpen = useAppSelector(state => state.currentRoom.isOwnVideoOpen)
   const dispatch = useAppDispatch()
   useEffect(() => {
-    dispatch(initDevices)
+    dispatch(initDevices())
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 

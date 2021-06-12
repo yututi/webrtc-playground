@@ -97,20 +97,4 @@ const NewRoom: React.VFC = () => {
   )
 }
 
-const RadioField = () => {
-
-  return (
-    <div className="field">
-      <input
-        id="video-text"
-        name="room-types"
-        type="radio"
-        disabled
-        placeholder="ルーム名"
-      />
-      <label htmlFor="video-text">ビデオ/テキストチャット</label>
-    </div>
-  )
-}
-
 export default NewRoom

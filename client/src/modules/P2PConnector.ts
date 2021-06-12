@@ -26,7 +26,6 @@ export default class P2PConnector {
     onRemoteUserNameChanged
   }: P2PApiFacadeArgs) {
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     this.p2p = p2p
 
     this.events = {}

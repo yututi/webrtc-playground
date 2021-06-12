@@ -1,7 +1,7 @@
 // Socketの管理を行うContext
 // non-serializableのためReduxで管理できないためsocketだけここで管理する
 
-import React, { createContext, useEffect, useMemo } from "react"
+import React, { createContext, useMemo } from "react"
 import { useContext } from "react"
 import { useAppDispatch, useAppSelector } from "redux/hooks"
 import { setUserId } from "redux/slices/global"
@@ -22,19 +22,20 @@ export const SocketProvider: React.FC = ({ children }) => {
 
   const socket = useMemo(() => {
     if (!userIsDefined) return null
+
     const socket = io(HOST, {
       query: {
         userName
       }
     })
 
-    socket.on("connect", ()=> {
+    // 払いだされたidをReduxに渡す
+    socket.on("connect", () => {
       socket.connected && dispatch(setUserId(socket.id))
     })
 
     return socket
   }, [dispatch, userIsDefined, userName])
-
 
   return (
     <SocketContext.Provider value={socket}>{children}</SocketContext.Provider>

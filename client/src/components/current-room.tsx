@@ -4,7 +4,6 @@ import MyVideo from "components/own-video"
 import "./current-room.scss"
 import { useAppDispatch, useAppSelector } from "redux/hooks"
 import {
-  leaveRoom,
   addUser,
   removeUserById,
   addUsersWithoutMyOwn

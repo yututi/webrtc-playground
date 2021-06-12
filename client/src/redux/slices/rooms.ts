@@ -48,7 +48,8 @@ export const {
   addRoom,
   addUser,
   removeRoom,
-  removeUser
+  removeUser,
+  setRooms
 } = roomsSlice.actions
 
 export const selectRooms = (state: RootState) => state.rooms.rooms

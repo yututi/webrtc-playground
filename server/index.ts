@@ -101,7 +101,10 @@ io.on('connection', (socket) => {
 
     // すでに部屋にいるユーザのidを返す
     const sids = Array.from(io.sockets.adapter.rooms.get(roomId) || [])
-    io.to(socket.id).emit("room-joined", sids)
+
+    const users = sids.map(id => getUserById(id))
+
+    io.to(socket.id).emit("room-joined", users)
   })
 
   socket.on("leave-room", name => {

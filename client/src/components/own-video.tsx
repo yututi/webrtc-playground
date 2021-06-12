@@ -5,8 +5,8 @@ import IconBtn from "components/icon-btn"
 import {
   faAngleUp,
   faAngleDown,
-  faVolumeMute,
-  faVolumeUp,
+  faMicrophoneAltSlash,
+  faMicrophoneAlt,
   faVideo,
   faVideoSlash,
   faCog
@@ -132,7 +132,7 @@ const VideoActions = React.memo(() => {
       />
       <IconBtn
         iconSize="lg"
-        icon={isAudioMute ? faVolumeMute : faVolumeUp}
+        icon={isAudioMute ? faMicrophoneAltSlash : faMicrophoneAlt}
         onClick={onAudioIconClick}
         reverse
         color="white"

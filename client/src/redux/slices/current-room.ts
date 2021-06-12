@@ -34,13 +34,10 @@ export const currentRoomSlice = createSlice({
     addUser: (state, action: PayloadAction<UserWithOffer>) => {
       state.users.push(action.payload)
     },
-    addUsers: (state, action: PayloadAction<UserWithOffer[]>) => {
+    setUsers: (state, action: PayloadAction<UserWithOffer[]>) => {
       state.users = [
-        ...state.users,
         ...action.payload
       ]
-      console.log("state.users", state.users)
-      console.log("action.payload", action.payload)
     },
     removeUserById: (state, action: PayloadAction<string>) => {
       state.users.splice(state.users.findIndex(user => user.id === action.payload), 1)
@@ -58,7 +55,7 @@ export const currentRoomSlice = createSlice({
 export const {
   removeUserById,
   leaveRoom,
-  addUsers,
+  setUsers,
   updateUserNameById,
   joinRoom,
   toggleOwnVideo,
@@ -67,12 +64,12 @@ export const {
 
 export const currentRooms = (state: RootState) => state.currentRoom
 
-export const addUsersWithoutMyOwn = (users: UserWithOffer[]): AppThunk => (
+export const setUsersWithoutMyOwn = (users: UserWithOffer[]): AppThunk => (
   dispatch,
   getState
 ) => {
   const id = getState().global.userId
-  dispatch(addUsers(users.filter(user => user.id !== id)))
+  dispatch(setUsers(users.filter(user => user.id !== id)))
 };
 
 

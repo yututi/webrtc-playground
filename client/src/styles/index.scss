@@ -105,6 +105,7 @@ body,
 .action-btns {
   display: flex;
   justify-content: flex-end;
+  align-items: center;
 
   & > *:not(:first-child) {
     margin-left: 6px;
@@ -255,6 +256,9 @@ input[type="range"] {
   border: none;
   height: 4px;
   background-color: var(--on-component-color);
+  // ↓設定して、background-sizeプロパティを動的にいじればスライダーの左側に色を塗れる
+  // background-image: linear-gradient(#ff4500, #ff4500);
+  // background-repeat: no-repeat;
 
   &::-webkit-slider-thumb {
     background: var(--component-color);

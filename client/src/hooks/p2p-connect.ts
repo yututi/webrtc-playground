@@ -7,7 +7,6 @@ import P2PConnector from "modules/P2PConnector"
 
 export const useP2PConnect = (remoteUser: UserWithOffer, localUserName: string) => {
 
-  const [remoteUserName, setName] = useState("-")
   const [stream, setStream] = useState<MediaStream>(null)
 
   const socket = useSocket()
@@ -22,7 +21,7 @@ export const useP2PConnect = (remoteUser: UserWithOffer, localUserName: string) 
       p2p,
       localUserName,
       remoteUser,
-      onRemoteUserNameChanged: setName
+      onRemoteUserNameChanged: ()=> {}
     })
 
     setStream(p2p.stream)
@@ -33,7 +32,6 @@ export const useP2PConnect = (remoteUser: UserWithOffer, localUserName: string) 
   }, [remoteUser, socket, localUserName])
 
   return {
-    remoteUserName,
     stream
   }
 }

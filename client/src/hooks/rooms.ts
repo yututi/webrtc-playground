@@ -4,9 +4,11 @@ import { getRooms } from "api"
 import { Room, UserWithRoom } from "types"
 
 type RoomEvent = (room: Room) => void
+type RoomsEvent = (room: Room[]) => void
 type MemberEvent = (room: UserWithRoom) => void
 
 type UseRoomsArgs = {
+  onRooms: RoomsEvent
   onRoomAdded: RoomEvent
   onRoomRemoved: RoomEvent
   onMemberJoined: MemberEvent
@@ -23,7 +25,7 @@ export default function useRooms(args: UseRoomsArgs) {
   eventsRef.current = args
 
   useEffect(() => {
-    getRooms().then(rooms => rooms.forEach(room => eventsRef.current.onRoomAdded(room))) // FIXME
+    getRooms().then(rooms => eventsRef.current.onRooms(rooms)) // FIXME
   }, [])
 
   useEffect(() => {

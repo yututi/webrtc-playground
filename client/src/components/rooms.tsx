@@ -10,7 +10,8 @@ import {
   addUser,
   addRoom,
   removeUser,
-  removeRoom
+  removeRoom,
+  setRooms
 } from "redux/slices/rooms"
 import { joinRoom } from "redux/slices/current-room"
 import useRooms from "hooks/rooms";
@@ -38,12 +39,15 @@ const Rooms: React.FC = React.memo(() => {
     },
     onRoomRemoved: room => {
       dispatch(removeRoom(room.name))
+    },
+    onRooms: rooms => {
+      dispatch(setRooms(rooms))
     }
   })
 
   return (
     <div className="rooms">
-      {rooms.map(room => <RoomComponent key={room.name} room={room}></RoomComponent>)}
+      {rooms.map(room => <RoomComponent key={room.id} room={room}></RoomComponent>)}
       {rooms.length === 0 ? (
         <h3>No rooms...</h3>
       ) : ""

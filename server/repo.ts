@@ -7,7 +7,7 @@ import { v4 } from "uuid"
 const idToRooms: { [key: string]: Room } = {}
 const roomIdToUsers: { [key: string]: User[] } = {}
 const userIdToRoomId: { [key: string]: string } = {}
-const userIdToUsers: { [key: string]: User } = {}
+const userIdToUser: { [key: string]: User } = {}
 
 export const listRoom = () => {
   return Object.values(idToRooms)
@@ -28,12 +28,12 @@ export const deleteRoom = (roomId: string) => {
 }
 
 export const joinRoom = (roomId: string, userId: string): boolean => {
-  if (!roomIdToUsers[roomId] || !userIdToUsers[userId]) {
+  if (!roomIdToUsers[roomId] || !userIdToUser[userId]) {
     return false
   }
 
   roomIdToUsers[roomId].push(
-    userIdToUsers[userId]
+    userIdToUser[userId]
   )
   userIdToRoomId[userId] = roomId
 
@@ -41,7 +41,7 @@ export const joinRoom = (roomId: string, userId: string): boolean => {
 }
 
 export const leaveRoom = (roomId: string, userId: string) => {
-  if (!roomIdToUsers[roomId] || !userIdToUsers[userId]) {
+  if (!roomIdToUsers[roomId] || !userIdToUser[userId]) {
     return false
   }
   delete userIdToRoomId[userId]
@@ -51,7 +51,7 @@ export const leaveRoom = (roomId: string, userId: string) => {
 }
 
 export const createUser = (userId: string, userName: string) => {
-  userIdToUsers[userId] = {
+  userIdToUser[userId] = {
     id: userId,
     name: userName
   }
@@ -61,11 +61,11 @@ export const removeUser = (userId: string) => {
   if(userIdToRoomId[userId]) {
     leaveRoom(userIdToRoomId[userId], userId)
   }
-  delete userIdToUsers[userId]
+  delete userIdToUser[userId]
 }
 
 export const getUserById = (userId: string) => {
-  return userIdToUsers[userId]
+  return userIdToUser[userId]
 }
 
 export const getRoomById = (roomId: string) => {

@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from "redux/hooks"
 import {
   addUser,
   removeUserById,
-  addUsersWithoutMyOwn
+  setUsersWithoutMyOwn
 } from "redux/slices/current-room"
 import useCurrentRoom from "hooks/current-room";
 import { useHistory, useParams } from "react-router-dom";
@@ -34,15 +34,9 @@ const CurrentRoom: React.VFC = () => {
     onMemberLeaved: userId => {
       dispatch(removeUserById(userId))
     },
-    onRoomJoined: alreadyJoinedUserIds => {
-      const userInfos = alreadyJoinedUserIds.map(id => {
-        return {
-          id,
-          name: "-"
-        }
-      })
-      console.log({ userInfos })
-      dispatch(addUsersWithoutMyOwn(userInfos))
+    onRoomJoined: alreadyJoinedUsers => {
+      // console.log({ userInfos })
+      dispatch(setUsersWithoutMyOwn(alreadyJoinedUsers))
     }
   })
 

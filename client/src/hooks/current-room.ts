@@ -1,13 +1,14 @@
 // import firebase, { store } from "modules/firebase"
 import { useEffect, useRef } from "react"
 import { useSocket } from "./socket"
+import { User } from "types"
 
 type OfferInfo = {
   from: string
   offer?: RTCSessionDescriptionInit
   name: string
 }
-type RoomJoinedEvent = (alreadyJoinedMemberIds: string[]) => void
+type RoomJoinedEvent = (alreadyJoinedMembers: User[]) => void
 type MemberLeavedEvent = (leavedMemberId: string) => void
 type MemberJoinedEvent = (offer: OfferInfo) => void
 
@@ -40,8 +41,8 @@ const useCurrentRoom = ({ roomId, ...args }: UseRoomArgs) => {
     const onMemberLeaved: MemberLeavedEvent = (userId) => {
       eventsArgs.current.onMemberLeaved(userId)
     }
-    const onRoomJoined: RoomJoinedEvent = (ids) => {
-      eventsArgs.current.onRoomJoined(ids)
+    const onRoomJoined: RoomJoinedEvent = (users) => {
+      eventsArgs.current.onRoomJoined(users)
     }
 
     const events = {

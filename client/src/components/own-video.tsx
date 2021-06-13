@@ -48,11 +48,14 @@ const Video = React.memo(() => {
     videoId,
     isVideoMute
   } = useAppSelector(state => state.devices.current)
+  console.log({isVideoMute, videoId})
 
   useEffect(() => {
     if (!videoId) return
 
     const currentEl = ref.current
+
+    console.log({isVideoMute, videoId})
 
     if (isVideoMute) {
       currentEl.srcObject = null

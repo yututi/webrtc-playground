@@ -12,10 +12,6 @@ export type SerializableDeviceInfo = {
   type: string
 }
 
-type AvailableDeviceInfo = {
-  videos: MediaDeviceInfo[],
-  audioIns: MediaDeviceInfo[]
-}
 type AvailableSerializableDeviceInfo = {
   videos: SerializableDeviceInfo[],
   audioIns: SerializableDeviceInfo[]

@@ -41,11 +41,19 @@ export const useP2PConnect = (remoteUser: UserWithOffer, localUserName: string) 
   } = useAppSelector(state => state.devices.current)
 
   useEffect(() => {
+    if (!p2p) return
+
     p2p.audioMute = isAudioMute
     p2p.videoMute = isVideoMute
   }, [isVideoMute, isAudioMute, p2p])
 
   useEffect(() => {
+    if (!p2p) return
+
+    console.log({
+      audioInId
+    })
+
     p2p.setDevice({
       videoDeviceId: videoId,
       audioDeviceId: audioInId

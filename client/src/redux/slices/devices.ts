@@ -79,11 +79,18 @@ export const slice = createSlice({
     setAudioAccessPermit: (state, action: PayloadAction<boolean>) => {
       state.permission.isAudioPermitted = action.payload
     },
-    setAvailableDevices: (state, action: PayloadAction<AvailableSerializableDeviceInfo>) => {
+    setAvailableDevices: (state, {payload}: PayloadAction<AvailableSerializableDeviceInfo>) => {
       state.availableDevices = {
-        audioIns: action.payload.audioIns,
-        videos: action.payload.videos
+        audioIns: payload.audioIns,
+        videos: payload.videos
       }
+      if (payload.videos.every(video => video.deviceId !== state.current.videoId)) {
+        state.current.videoId = null
+      }
+      if (payload.audioIns.every(audio => audio.deviceId !== state.current.audioInId)) {
+        state.current.audioInId = null
+      }
+
     },
   }
 })

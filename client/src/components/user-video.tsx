@@ -37,6 +37,7 @@ const User: React.VFC<Props> = ({ user }) => {
   )
 
   useEffect(() => {
+    if(!p2p) return
     videoRef.current.srcObject = p2p.stream
   }, [p2p])
 

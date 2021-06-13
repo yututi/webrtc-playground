@@ -91,7 +91,8 @@ export class P2P {
   }
 
   setDevice({ videoDeviceId: videoId, audioDeviceId: audioId }: { videoDeviceId?: string, audioDeviceId?: string }) {
-    return navigator.mediaDevices.getUserMedia({
+    if (!videoId && !audioId) return
+    navigator.mediaDevices.getUserMedia({
       video: !!videoId && {
         deviceId: videoId,
         height: this.height,

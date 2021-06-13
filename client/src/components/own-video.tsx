@@ -210,7 +210,7 @@ const DeviceSelector: React.FC<DeviceSelectorProps> = React.memo(({ label, curre
   return (
     <div className="device-select">
       <label className="device-select__label">{label}</label>
-      <select className="device-select__select" value={currentDeviceId} onChange={e => onSelect(devices.find(d => d.deviceId === e.target.value))}>
+      <select className="device-select__select" defaultValue={currentDeviceId} onChange={e => onSelect(devices.find(d => d.deviceId === e.target.value))}>
         {devices.map(device => (
           <option
             key={device.deviceId}

@@ -28,7 +28,8 @@ const useCurrentRoom = ({ roomId, ...args }: UseRoomArgs) => {
   const eventsArgs = useRef<{
     onRoomJoined: RoomJoinedEvent,
     onMemberLeaved: MemberLeavedEvent,
-    onMemberJoined: MemberJoinedEvent
+    onMemberJoined: MemberJoinedEvent,
+    onRoomLeaved: RoomLeavedEvent
   }>(null)
   eventsArgs.current = args
 
@@ -62,6 +63,7 @@ const useCurrentRoom = ({ roomId, ...args }: UseRoomArgs) => {
         socket.off(name, handler)
       })
       socket.emit("leave-room", roomId)
+      eventsArgs.current.onRoomLeaved()
     }
   }, [roomId, socket])
 }

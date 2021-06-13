@@ -47,7 +47,7 @@ const User: React.VFC<Props> = ({ user }) => {
   }, [volume, isMute])
 
   return (
-    <div className="user video" ref={ref}>
+    <div className="video user" ref={ref}>
       <div className="video__inner">
         <video
           className="user__video"

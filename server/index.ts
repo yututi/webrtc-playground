@@ -109,6 +109,7 @@ io.on('connection', (socket) => {
 
   socket.on("leave-room", name => {
     console.log("leave-room", name)
+    leaveRoom(name, socket.id)
     socket.leave(name)
   })
 

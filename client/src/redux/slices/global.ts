@@ -1,23 +1,26 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { RootState } from "redux/store"
 import { isMobile } from "utils"
+import { Theme } from "types"
 
-export interface RoomsState {
+export interface GlobalState {
   status: "idle" | "loading"
   errors: string[]
   userId: string // socket.ioから払いだされるソケットID
   userName: string
   isUserNameDefined: boolean,
   isNavOpen: boolean
+  theme: Theme
 }
 
-const initialState: RoomsState = {
+const initialState: GlobalState = {
   status: "idle",
   errors: [],
   userId: null,
   userName: "Guest",
   isUserNameDefined: false,
-  isNavOpen: !isMobile
+  isNavOpen: !isMobile,
+  theme: "light"
 }
 
 export const slice = createSlice({
@@ -37,13 +40,17 @@ export const slice = createSlice({
     setUserId: (state, action: PayloadAction<string>) => {
       state.userId = action.payload
     },
+    setTheme: (state, action: PayloadAction<Theme>) => {
+      state.theme = action.payload
+    }
   }
 })
 export const {
   setLoading,
   toggleNavOpen,
   setUserName,
-  setUserId
+  setUserId,
+  setTheme
 } = slice.actions
 
 export const selectIsLoading = (state: RootState) => state.global.status === "loading"

@@ -15,6 +15,42 @@ body {
 }
 
 :root {
+  --error: #e6503d;
+  --on-error: #ffffff;
+  --mf: #999999;
+  --header-height: 60px;
+  --disable: lightgray;
+}
+
+.light {
+  --background: #f8f6f1;
+  --on-background: #252525;
+  --primary: rgba(238, 238, 238, 0.555);
+  --on-primary: #252525;
+  --secondary: #a0a0a0;
+  --on-secondary: #4e4e4e;
+  --surface: #ffffff;
+  --on-surface: #333333;
+  --component-color: var(--primary);
+  --on-component-for-highlight: var(--on-primary);
+  --on-component-color: var(--on-primary);
+}
+
+.dark {
+  --background: #535353;
+  --on-background: #ffffff;
+  --primary: rgb(83, 83, 83);
+  --on-primary: #ffffff;
+  --secondary: #acacac;
+  --on-secondary: #1a1a1a;
+  --surface: #383838;
+  --on-surface: #f1f1f1;
+  --component-color: var(--primary);
+  --on-component-for-highlight: var(--on-primary);
+  --on-component-color: var(--on-primary);
+}
+
+.orange {
   --background: #ebebeb;
   --on-background: #252525;
   --primary: #ec821f;
@@ -23,13 +59,9 @@ body {
   --on-secondary: #ffffff;
   --surface: #f8f6f1;
   --on-surface: #333333;
-  --error: #e6503d;
-  --on-error: #ffffff;
-  --mf: #999999;
-  --header-height: 60px;
   --component-color: var(--primary);
+  --on-component-for-highlight: var(--primary);
   --on-component-color: var(--on-primary);
-  --disable: lightgray;
 }
 
 html,
@@ -47,6 +79,7 @@ body,
   height: 100%;
   max-height: 100%;
   overflow: hidden;
+  background-color: var(--background);
 }
 .body {
   display: flex;
@@ -208,7 +241,7 @@ button.btn {
 button.btn--is-flat {
   box-shadow: none;
   background-color: transparent;
-  color: var(--component-color);
+  color: var(--on-component-for-highlight);
 }
 
 .link-btn {
@@ -247,7 +280,7 @@ input[type="text"] {
   transition: border-color 0.3s;
 }
 input[type="text"]:focus {
-  border-color: var(--component-color);
+  border-color: var(--on-component-for-highlight);
 }
 
 .form.checked input[type="text"]:invalid {
@@ -292,9 +325,9 @@ select {
   padding: 4px;
   background-color: transparent;
   border-radius: 999px;
-  border: 1px solid var(--primary);
+  border: 1px solid var(--on-component-for-highlight);
   outline: none;
-  color: var(--primary);
+  color: var(--on-surface);
 }
 
 fieldset {

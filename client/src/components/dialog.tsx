@@ -5,6 +5,7 @@ import { faTimes } from "@fortawesome/free-solid-svg-icons"
 import "./dialog.scss"
 import { useDynamicAnimation } from "utils/custom-hooks"
 import IconBtn from "./icon-btn"
+import { useAppSelector } from "redux/hooks"
 
 type Props = {
   isOpen: boolean
@@ -28,6 +29,13 @@ const Dialog: React.FC<Props> = ({ children, isOpen, dialogTitle, close, closeIf
     "presentation--is-open": shouldAppendAnimationClass
   })
 
+  const theme = useAppSelector(state => state.global.theme)
+
+  const dialogClasses = [
+    theme,
+    "dialog component"
+  ].filter(Boolean).join(" ")
+
   const onOutsideClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (closeIfOutsideClick && e.target === e.currentTarget) close()
   }
@@ -36,7 +44,7 @@ const Dialog: React.FC<Props> = ({ children, isOpen, dialogTitle, close, closeIf
     <>
       <div className={`modal ${modalClass}`} onTransitionEnd={onAnimationEnd}></div>
       <div className={`presentation ${presentationClass}`} onClick={onOutsideClick}>
-        <div className="dialog component">
+        <div className={dialogClasses}>
           <div className="dialog__header">
             <div className="dialog__title">{dialogTitle}</div>
             <div className="spacer"></div>

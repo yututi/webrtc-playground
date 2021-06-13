@@ -11,6 +11,15 @@
     align-items: center;
   }
 
+  &__right {
+    margin-right: 8px;
+    display: flex;
+    align-items: center;
+    & > *:not(:first-child) {
+      margin-left: 8px;
+    }
+  }
+
   &__title {
     margin-left: 8px;
     font-size: 1.5em;

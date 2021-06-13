@@ -1,7 +1,8 @@
-import MeInfo from "components/me-info"
+import MeInfo from "components/own-info"
 import "./header.scss"
 import IconBtn from "components/icon-btn"
 import { faBars } from "@fortawesome/free-solid-svg-icons"
+import { faGithub } from "@fortawesome/free-brands-svg-icons"
 import { useAppDispatch } from "redux/hooks"
 import { toggleNavOpen } from "redux/slices/global"
 import { useHistory } from "react-router-dom"
@@ -21,6 +22,7 @@ const Header: React.FC<Props> = ({ title }) => {
       </div>
       <div className="spacer"></div>
       <div className="header__right">
+        <IconBtn iconSize="2x" icon={faGithub} onClick={() => window.open(process.env.REACT_APP_GITHUB_URL)}></IconBtn>
         <MeInfo></MeInfo>
       </div>
     </div>

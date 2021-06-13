@@ -12,8 +12,15 @@ const CurrentRoom = React.lazy(() => import("components/current-room"))
 
 export default function App() {
 
+  const theme = useAppSelector(state => state.global.theme)
+
+  const classes = [
+    "main flex is-vertical",
+    theme
+  ].filter(Boolean).join(" ")
+
   return (
-    <main className="main flex is-vertical">
+    <main className={classes}>
       <Header
         title="⚡️ WebRTC Playground"
       />

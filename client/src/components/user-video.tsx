@@ -30,16 +30,15 @@ const User: React.VFC<Props> = ({ user }) => {
   } = useMouseInOut()
 
   const {
-    stream
+    p2p
   } = useP2PConnect(
     user,
     localUserName,
   )
 
   useEffect(() => {
-    console.log("stream", stream)
-    videoRef.current.srcObject = stream
-  }, [stream])
+    videoRef.current.srcObject = p2p.stream
+  }, [p2p])
 
   useEffect(() => {
     videoRef.current.volume = isMute ? 0 : volume

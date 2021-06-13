@@ -62,6 +62,13 @@
   width: 100%;
   padding-top: 75%;
   position: relative;
+  text-align: center;
+
+  &__message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+  }
 }
 .video > .video__inner,
 video {

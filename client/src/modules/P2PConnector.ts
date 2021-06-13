@@ -1,11 +1,11 @@
 import { Socket } from "socket.io-client"
 import { UserWithOffer, CandidateInfo, AnswerInfo } from "types"
-import { P2PVideo } from "./P2PVideo"
+import { P2P } from "./P2P"
 
 type P2PApiFacadeArgs = {
   remoteUser: UserWithOffer,
   socket: Socket,
-  p2p: P2PVideo,
+  p2p: P2P,
   localUserName: string,
   onRemoteUserNameChanged: (name: string) => void
 }
@@ -14,7 +14,7 @@ export default class P2PConnector {
 
   private socket: Socket
 
-  private p2p: P2PVideo
+  private p2p: P2P
 
   private events: { [key: string]: (...args: any[]) => void }
 
@@ -87,10 +87,6 @@ export default class P2PConnector {
     })
 
     this.socket = socket
-  }
-
-  get stream() {
-    return this.p2p.stream
   }
 
   destroy() {

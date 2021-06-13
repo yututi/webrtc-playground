@@ -7,12 +7,16 @@ interface CanvasElement extends HTMLCanvasElement {
 interface MediaStreamAudioDestinationNode extends AudioNode {
   stream: MediaStream;
 }
-export class P2PVideo {
+export class P2P {
 
   private height: number = 0
   private width: number = 0
   private connection: RTCPeerConnection = null
   private remoteStream: MediaStream = new MediaStream()
+  // オーディオ出力先を変える場合、audioのstreamをaudio要素へ向ける必要がある(setSinkIdがHTMLMediaElementにしかないので)
+  // その場合は以下のようにstreaを分ける必要あり
+  // private remoteVideoStream: MediaStream = new MediaStream()
+  // private remoteAudioStream: MediaStream = new MediaStream()
 
   private _videoMute: boolean = false
   private _audioMute: boolean = false
@@ -48,6 +52,12 @@ export class P2PVideo {
 
     this.connection.addEventListener("track", e => {
       if (e.track) this.remoteStream.addTrack(e.track)
+      // if (e.track?.kind === "audio") {
+      //   this.remoteAudioStream.addTrack(e.track)
+      // }
+      // if (e.track?.kind === "video") {
+      //   this.remoteVideoStream.addTrack(e.track)
+      // }
     })
   }
 
@@ -128,6 +138,14 @@ export class P2PVideo {
   get stream() {
     return this.remoteStream
   }
+
+  // get videoStream() {
+  //   return this.remoteVideoStream
+  // }
+
+  // get audioStream() {
+  //   return this.remoteAudioStream
+  // }
 
   destroy() {
     this.connection.close()

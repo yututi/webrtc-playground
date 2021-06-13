@@ -29,4 +29,9 @@ button.icon-btn {
     width: initial;
   }
 
+  &--is-flat {
+    background-color: transparent;
+    color: var(--component-color);
+    box-shadow: none;
+  }
 }

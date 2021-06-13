@@ -11,9 +11,10 @@ const RoomAdder: React.FC = () => {
   return (
     <div className="adder mt-1">
       <IconBtn
-        size="sm"
         iconSize="1x"
         icon={faPlus}
+        flat
+        text="部屋を作成"
         onClick={() => history.push("/newroom")}
       />
     </div>

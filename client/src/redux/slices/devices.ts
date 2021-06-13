@@ -5,69 +5,100 @@ import { RootState, AppThunk } from "redux/store"
  * 使用する入出力機器、ミュート状態の管理
  */
 
+// MediaDeviceInfoはnon-serializableなので
+export type SerializableDeviceInfo = {
+  deviceId: string
+  label: string
+  type: string
+}
+
 type AvailableDeviceInfo = {
   videos: MediaDeviceInfo[],
-  audioIns: MediaDeviceInfo[],
-  audioOuts: MediaDeviceInfo[]
+  audioIns: MediaDeviceInfo[]
+}
+type AvailableSerializableDeviceInfo = {
+  videos: SerializableDeviceInfo[],
+  audioIns: SerializableDeviceInfo[]
 }
 
 export interface DeviceState {
-  currentVideoId: string
-  currentAudioInId: string
-  currentAudioOutId: string
-  isVideoMute: boolean
-  isAudioMute: boolean
-  isDeviceAccessPermitetd: boolean
-  availableDevices: AvailableDeviceInfo
+  current: {
+    videoId: string
+    audioInId: string
+    // audioOutId: string // 出力先変更はOS側でやってもらう
+    isVideoMute: boolean
+    isAudioMute: boolean
+  }
+  permission: {
+    isVideoPermitted: boolean
+    isAudioPermitted: boolean
+  }
+  availableDevices: AvailableSerializableDeviceInfo
 }
 
 const initialState: DeviceState = {
-  currentVideoId: "default",
-  currentAudioInId: "default",
-  currentAudioOutId: "default",
-  isVideoMute: true,
-  isAudioMute: true,
-  isDeviceAccessPermitetd: false,
+  current: {
+    videoId: "default",
+    audioInId: "default",
+    // audioOutId: "default",
+    isVideoMute: true,
+    isAudioMute: true
+  },
+  permission: {
+    isAudioPermitted: false,
+    isVideoPermitted: false
+  },
   availableDevices: {
     videos: [],
-    audioIns: [],
-    audioOuts: []
+    audioIns: []
   }
+}
+
+const toSerializable = (device: MediaDeviceInfo): SerializableDeviceInfo => {
+  console.log("device.toJSON()", device.toJSON())
+  return device.toJSON()
 }
 
 export const slice = createSlice({
   name: "devices",
   initialState,
   reducers: {
-    setVideo: (state, action: PayloadAction<MediaDeviceInfo>) => {
-      state.currentVideoId = action.payload.deviceId
+    setVideo: (state, action: PayloadAction<SerializableDeviceInfo>) => {
+      state.current.videoId = action.payload.deviceId
     },
-    setAudioIn: (state, action: PayloadAction<MediaDeviceInfo>) => {
-      state.currentAudioInId = action.payload.deviceId
+    setAudioIn: (state, action: PayloadAction<SerializableDeviceInfo>) => {
+      state.current.audioInId = action.payload.deviceId
     },
-    setAudioOut: (state, action: PayloadAction<MediaDeviceInfo>) => {
-      state.currentAudioOutId = action.payload.deviceId
-    },
+    // setAudioOut: (state, action: PayloadAction<SerializableDeviceInfo>) => {
+    //   state.current.audioOutId = action.payload.deviceId
+    // },
     setVideoMute: (state, action: PayloadAction<boolean>) => {
-      state.isVideoMute = action.payload
+      state.current.isVideoMute = action.payload
     },
     setAudioMute: (state, action: PayloadAction<boolean>) => {
-      state.isAudioMute = action.payload
+      state.current.isAudioMute = action.payload
     },
-    setDeviceAccessPermit: (state, action: PayloadAction<boolean>) => {
-      state.isDeviceAccessPermitetd = action.payload
+    setVideoAccessPermit: (state, action: PayloadAction<boolean>) => {
+      state.permission.isVideoPermitted = action.payload
     },
-    setAvailableDevices: (state, action: PayloadAction<AvailableDeviceInfo>) => {
-      state.availableDevices = action.payload
+    setAudioAccessPermit: (state, action: PayloadAction<boolean>) => {
+      state.permission.isAudioPermitted = action.payload
+    },
+    setAvailableDevices: (state, action: PayloadAction<AvailableSerializableDeviceInfo>) => {
+      state.availableDevices = {
+        audioIns: action.payload.audioIns,
+        videos: action.payload.videos
+      }
     },
   }
 })
 
 export const {
   setAudioIn,
-  setAudioOut,
+  // setAudioOut,
   setVideo,
-  setDeviceAccessPermit,
+  setVideoAccessPermit,
+  setAudioAccessPermit,
   setAudioMute,
   setVideoMute,
   setAvailableDevices
@@ -81,45 +112,61 @@ export const updateDevices = (): AppThunk => (
   navigator.mediaDevices.enumerateDevices().then(devices => {
     const _devices = devices.reduce((deviceAcc, device) => {
       if (device.kind === "videoinput") {
-        deviceAcc.videos.push(device)
+        deviceAcc.videos.push(toSerializable(device))
       }
       if (device.kind === "audioinput") {
-        deviceAcc.audioIns.push(device)
-      }
-      if (device.kind === "audiooutput") {
-        deviceAcc.audioOuts.push(device)
+        deviceAcc.audioIns.push(toSerializable(device))
       }
       return deviceAcc
     }, {
       videos: [],
-      audioIns: [],
-      audioOuts: []
-    })
+      audioIns: []
+    } as AvailableSerializableDeviceInfo)
     dispatch(setAvailableDevices(_devices))
   })
 }
 
-export const initDevices = (): AppThunk<Promise<boolean>> => (
+export const initDevices = (): AppThunk<Promise<any>> => (
+  dispatch
+) => {
+  return Promise.all([
+    navigator.mediaDevices.getUserMedia({
+      video: true
+    }).then(stream => {
+      dispatch(setVideoAccessPermit(true))
+    }).catch(() => {
+      dispatch(setVideoAccessPermit(false))
+    }),
+    navigator.mediaDevices.getUserMedia({
+      audio: true
+    }).then(stream => {
+      dispatch(setAudioAccessPermit(true))
+    }).catch(() => {
+      dispatch(setAudioAccessPermit(false))
+    })
+  ]).finally(() => {
+    dispatch(updateDevices())
+  })
+}
+
+export const getExactVideoId = (): AppThunk => (
   dispatch,
   getState
 ) => {
-  return new Promise(resolve => {
-    if (!getState().devices.isDeviceAccessPermitetd) {
-      navigator.mediaDevices.getUserMedia({
-        video: true,
-        audio: true
-      }).then(() => {
-        dispatch(setDeviceAccessPermit(true))
-        dispatch(updateDevices())
-        resolve(true)
-      }).catch(e => {
-        dispatch(setDeviceAccessPermit(false))
-        resolve(false)
-      })
+  const {
+    availableDevices: {
+      videos
+    },
+    current: {
+      videoId
     }
-    else resolve(true)
-  })
+  } = getState().devices
 
+  if (videos.some(video => video.deviceId === videoId)) {
+    return videoId
+  } else {
+    return null
+  }
 }
 
 export default slice.reducer

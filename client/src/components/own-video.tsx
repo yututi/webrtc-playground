@@ -16,9 +16,9 @@ import {
   initDevices,
   setAudioIn,
   setAudioMute,
-  setAudioOut,
   setVideoMute,
-  setVideo
+  setVideo,
+  SerializableDeviceInfo
 } from "redux/slices/devices"
 import { toggleOwnVideo } from "redux/slices/current-room"
 
@@ -28,8 +28,7 @@ const MyVideo: React.VFC = () => {
   const dispatch = useAppDispatch()
   useEffect(() => {
     dispatch(initDevices())
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [dispatch])
 
   return (
     <div className={`my-video card ${isOpen ? "my-video--is-open" : ""}`}>
@@ -46,12 +45,12 @@ const Video = React.memo(() => {
   const ref = useRef<HTMLVideoElement>(null)
 
   const {
-    currentVideoId,
+    videoId,
     isVideoMute
-  } = useAppSelector(state => state.devices)
+  } = useAppSelector(state => state.devices.current)
 
   useEffect(() => {
-    if (!currentVideoId) return
+    if (!videoId) return
 
     const currentEl = ref.current
 
@@ -62,7 +61,7 @@ const Video = React.memo(() => {
 
     navigator.mediaDevices.getUserMedia({
       video: {
-        deviceId: currentVideoId,
+        deviceId: videoId,
         height: 300,
         width: 400
       },
@@ -74,7 +73,7 @@ const Video = React.memo(() => {
     return () => {
       currentEl.srcObject = null
     }
-  }, [currentVideoId, isVideoMute])
+  }, [videoId, isVideoMute])
 
   return (
     <div className="video">
@@ -90,23 +89,29 @@ const VideoActions = React.memo(() => {
   const closeDialog = useCallback(() => setIsDialogOpen(false), [])
 
   const {
+    isAudioPermitted,
+    isVideoPermitted
+  } = useAppSelector(state => state.devices.permission)
+
+  const {
     isAudioMute,
-    isVideoMute,
-    isDeviceAccessPermitetd
-  } = useAppSelector(state => state.devices)
+    isVideoMute
+  } = useAppSelector(state => state.devices.current)
 
   const openDialog = useCallback(() => {
 
-    if (isDeviceAccessPermitetd) {
+    if (isAudioPermitted || isVideoPermitted) {
       setIsDialogOpen(true)
     } else {
       alert("カメラとオーディオへのアクセスを許可してください")
     }
-  }, [isDeviceAccessPermitetd])
+  }, [isAudioPermitted, isVideoPermitted])
 
   const dispatch = useAppDispatch()
 
-  const onAudioIconClick = useCallback(() => dispatch(setAudioMute(!isAudioMute)), [dispatch, isAudioMute])
+  const onAudioIconClick = useCallback(() => {
+    dispatch(setAudioMute(!isAudioMute))
+  }, [dispatch, isAudioMute])
   const onVideoIconClick = useCallback(() => dispatch(setVideoMute(!isVideoMute)), [dispatch, isVideoMute])
 
   const isOwnVideoOpen = useAppSelector(state => state.currentRoom.isOwnVideoOpen)
@@ -117,11 +122,11 @@ const VideoActions = React.memo(() => {
 
   return (
     <div className="box__btns action-btns">
-      <IconBtn
+      {isVideoPermitted && <IconBtn
         icon={isOwnVideoOpen ? faAngleDown : faAngleUp}
         color="secondary"
         onClick={onOwnVideoTogglerClick}
-      />
+      />}
       <div className="spacer"></div>
       <IconBtn
         iconSize="lg"
@@ -130,22 +135,22 @@ const VideoActions = React.memo(() => {
         reverse
         color="white"
       />
-      <IconBtn
+      {isAudioPermitted && <IconBtn
         iconSize="lg"
         icon={isAudioMute ? faMicrophoneAltSlash : faMicrophoneAlt}
         onClick={onAudioIconClick}
         reverse
         color="white"
-      />
-      <IconBtn
+      />}
+      {isVideoPermitted && <IconBtn
         iconSize="lg"
         icon={isVideoMute ? faVideoSlash : faVideo}
         onClick={onVideoIconClick}
         reverse
         color="white"
-      />
+      />}
       <DeviceSelectDialog
-        isOpen={isDialogOpen && isDeviceAccessPermitetd}
+        isOpen={isDialogOpen && (isVideoPermitted || isAudioPermitted)}
         close={closeDialog}
       />
     </div>
@@ -161,15 +166,13 @@ const DeviceSelectDialog: React.FC<DialogProps> = React.memo(({ isOpen, close })
 
   const {
     audioIns,
-    audioOuts,
     videos
   } = useAppSelector(state => state.devices.availableDevices)
 
   const {
-    currentAudioInId,
-    currentAudioOutId,
-    currentVideoId
-  } = useAppSelector(state => state.devices)
+    audioInId,
+    videoId
+  } = useAppSelector(state => state.devices.current)
 
   const dispatch = useAppDispatch()
 
@@ -178,21 +181,15 @@ const DeviceSelectDialog: React.FC<DialogProps> = React.memo(({ isOpen, close })
       <div className="device-selectors flex is-vertical">
         <DeviceSelector
           label="カメラ"
-          currentDeviceId={currentVideoId}
+          currentDeviceId={audioInId}
           devices={videos}
           onSelect={device => dispatch(setVideo(device))}
         />
         <DeviceSelector
           label="オーディオ(入力)"
-          currentDeviceId={currentAudioInId}
+          currentDeviceId={videoId}
           devices={audioIns}
           onSelect={device => dispatch(setAudioIn(device))}
-        />
-        <DeviceSelector
-          label="オーディオ(出力)"
-          currentDeviceId={currentAudioOutId}
-          devices={audioOuts}
-          onSelect={useCallback(device => dispatch(setAudioOut(device)), [dispatch])}
         />
       </div>
     </Dialog >
@@ -202,13 +199,13 @@ const DeviceSelectDialog: React.FC<DialogProps> = React.memo(({ isOpen, close })
 type DeviceSelectorProps = {
   label: string
   currentDeviceId: string
-  devices: (MediaDeviceInfo)[]
-  onSelect: (device: MediaDeviceInfo) => void
+  devices: (SerializableDeviceInfo)[]
+  onSelect: (device: SerializableDeviceInfo) => void
 }
 
 const DeviceSelector: React.FC<DeviceSelectorProps> = React.memo(({ label, currentDeviceId, devices, onSelect }) => {
 
-  const toDeviceName = (device: (MediaDeviceInfo)) => device.deviceId === "default" ? "デフォルト" : device.label
+  const toDeviceName = (device: (SerializableDeviceInfo)) => device.deviceId === "default" ? "デフォルト" : device.label
 
   return (
     <div className="device-select">

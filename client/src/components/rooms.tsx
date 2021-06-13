@@ -72,7 +72,7 @@ const RoomComponent: React.FC<Props> = ({ room }) => {
   }
 
   return (
-    <div key={room.name} className="rooms__room room" onClick={onClick}>
+    <div key={room.name} className="rooms__room room hl" onClick={onClick}>
       <div className="room__name">
         {room.name}
       </div>

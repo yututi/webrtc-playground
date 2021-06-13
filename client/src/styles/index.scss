@@ -16,7 +16,7 @@ body {
 
 :root {
   --background: #ebebeb;
-  --on-background: white;
+  --on-background: #252525;
   --primary: #ec821f;
   --on-primary: #ffffff;
   --secondary: #495883;
@@ -196,13 +196,19 @@ body,
   }
 }
 
-.btn {
+button.btn {
   background-color: var(--component-color);
   color: var(--on-component-color);
   padding: 8px;
   border-radius: 4px;
   min-width: 45px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.26);
+}
+
+button.btn--is-flat {
+  box-shadow: none;
+  background-color: transparent;
+  color: var(--component-color);
 }
 
 .link-btn {

@@ -11,18 +11,28 @@ type Props = {
   text?: string
   color?: Color
   reverse?: boolean
+  flat?: boolean
 }
 
 const IconBtn: React.VFC<Props & JSX.IntrinsicElements['button']> = React.memo((props) => {
 
-  const { icon, text, color = "primart", iconSize = "2x", reverse = false, size = "md", ...btnProps } = props
+  const { 
+    icon, 
+    text, 
+    color = "primart", 
+    iconSize = "2x", 
+    reverse = false, 
+    size = "md", 
+    flat = false,
+    ...btnProps } = props
 
   const classes = [
     "icon-btn hl flex is-align-center",
     color,
     reverse && "icon-btn--is-reverse",
     `icon-btn--is-${size}`,
-    !!text && "icon-btn--is-square btn"
+    !!text && "icon-btn--is-square btn",
+    flat && "icon-btn--is-flat"
   ].filter(Boolean).join(" ")
 
   return (

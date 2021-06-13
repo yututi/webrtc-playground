@@ -51,7 +51,6 @@ const initialState: DeviceState = {
 }
 
 const toSerializable = (device: MediaDeviceInfo): SerializableDeviceInfo => {
-  console.log("device.toJSON()", device.toJSON())
   return device.toJSON()
 }
 

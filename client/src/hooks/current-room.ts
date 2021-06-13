@@ -9,6 +9,7 @@ type OfferInfo = {
   name: string
 }
 type RoomJoinedEvent = (alreadyJoinedMembers: User[]) => void
+type RoomLeavedEvent = () => void
 type MemberLeavedEvent = (leavedMemberId: string) => void
 type MemberJoinedEvent = (offer: OfferInfo) => void
 
@@ -16,7 +17,8 @@ type UseRoomArgs = {
   roomId: string
   onRoomJoined: RoomJoinedEvent,
   onMemberLeaved: MemberLeavedEvent,
-  onMemberJoined: MemberJoinedEvent
+  onMemberJoined: MemberJoinedEvent,
+  onRoomLeaved: RoomLeavedEvent
 }
 
 const useCurrentRoom = ({ roomId, ...args }: UseRoomArgs) => {

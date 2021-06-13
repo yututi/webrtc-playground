@@ -6,7 +6,8 @@ import { useAppDispatch, useAppSelector } from "redux/hooks"
 import {
   addUser,
   removeUserById,
-  setUsersWithoutMyOwn
+  setUsersWithoutMyOwn,
+  leaveRoom
 } from "redux/slices/current-room"
 import useCurrentRoom from "hooks/current-room";
 import { useHistory, useParams } from "react-router-dom";
@@ -37,6 +38,9 @@ const CurrentRoom: React.VFC = () => {
     onRoomJoined: alreadyJoinedUsers => {
       // console.log({ userInfos })
       dispatch(setUsersWithoutMyOwn(alreadyJoinedUsers))
+    },
+    onRoomLeaved: () => {
+      dispatch(leaveRoom())
     }
   })
 

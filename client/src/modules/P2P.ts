@@ -1,12 +1,14 @@
 import { VIDEO } from "const"
 
-// extends interfece of HTMLCanvasElement because captureStream is still draft.
+// draftのifを使うので定義を拡張する.
 interface CanvasElement extends HTMLCanvasElement {
   captureStream(int): MediaStream;
 }
 interface MediaStreamAudioDestinationNode extends AudioNode {
   stream: MediaStream;
 }
+
+// 
 export class P2P {
 
   private height: number = 0

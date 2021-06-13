@@ -10,6 +10,7 @@ import {
   faVolumeUp,
 } from "@fortawesome/free-solid-svg-icons"
 
+// リモートユーザのビデオ
 
 type Props = {
   user: UserWithOffer
@@ -66,6 +67,8 @@ const User: React.VFC<Props> = ({ user }) => {
     </div>
   )
 }
+
+// ボリューム管理用
 
 type UserActionProps = {
   show: boolean

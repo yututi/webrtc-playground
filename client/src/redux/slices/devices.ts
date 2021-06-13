@@ -86,10 +86,10 @@ export const slice = createSlice({
       }
       // この辺の、デフォルトデバイスを決定するやり方を改善する必要あり
       if (payload.videos.every(video => video.deviceId !== state.current.videoId)) {
-        state.current.videoId = payload.videos[0].deviceId
+        state.current.videoId = payload.videos[0]?.deviceId
       }
       if (payload.audioIns.every(audio => audio.deviceId !== state.current.audioInId)) {
-        state.current.audioInId = payload.audioIns[0].deviceId
+        state.current.audioInId = payload.audioIns[0]?.deviceId
       }
 
     },

@@ -75,7 +75,9 @@ const server = app.listen(PORT, function () {
 })
 
 // socket io conf
-const socOptions: Partial<ServerOptions> = {}
+const socOptions: Partial<ServerOptions> = {
+  path: "/soc/"
+}
 if (dev) {
   socOptions.cors = {
     origin: "*",

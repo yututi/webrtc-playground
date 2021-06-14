@@ -8,7 +8,7 @@ import { setUserId } from "redux/slices/global"
 import { io, Socket } from "socket.io-client"
 import { isDevelopment } from "utils"
 
-const HOST = isDevelopment ? `ws://localhost:5000` : window.location
+const HOST = isDevelopment ? `ws://localhost:5000` : `wss://${window.location.hostname}`
 
 type SocketState = Socket | null
 
@@ -26,7 +26,8 @@ export const SocketProvider: React.FC = ({ children }) => {
     const socket = io(HOST, {
       query: {
         userName
-      }
+      },
+      path: "/soc/"
     })
 
     // 払いだされたidをReduxに渡す

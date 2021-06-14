@@ -229,7 +229,8 @@ body,
   }
 }
 
-button.btn {
+button.btn,
+input[type="button"].btn {
   background-color: var(--component-color);
   color: var(--on-component-color);
   padding: 8px;
@@ -238,7 +239,8 @@ button.btn {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.26);
 }
 
-button.btn--is-flat {
+button.btn--is-flat,
+input[type="button"].btn--is-flat {
   box-shadow: none;
   background-color: transparent;
   color: var(--on-component-for-highlight);
@@ -309,13 +311,15 @@ input[type="range"] {
   }
 }
 
-button {
+button,
+input[type="button"] {
   // border: 1px solid var(--component-color);
   outline: none;
   border: none;
   cursor: pointer;
 }
-button.is-error {
+button.is-error,
+input[type="button"].is-error {
   border: 1px solid var(--error);
   background-color: var(--error);
   color: var(--on-error);

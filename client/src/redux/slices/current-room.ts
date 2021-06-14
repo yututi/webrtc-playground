@@ -26,10 +26,13 @@ export const currentRoomSlice = createSlice({
   reducers: {
     joinRoom: (state, action: PayloadAction<Room>) => {
       state.room = action.payload
-    },
-    leaveRoom: (state) => {
-      state.room = null
       state.users = []
+    },
+    leaveRoomById: (state, { payload }: PayloadAction<string>) => {
+      if (state.room && state.room.id === payload) {
+        state.room = null
+        state.users = []
+      }
     },
     addUser: (state, action: PayloadAction<UserWithOffer>) => {
       state.users.push(action.payload)
@@ -46,7 +49,7 @@ export const currentRoomSlice = createSlice({
       const user = state.users.find(user => user.id === action.payload.id)
       user.name = action.payload.id
     },
-    toggleOwnVideo:  (state) => {
+    toggleOwnVideo: (state) => {
       state.isOwnVideoOpen = !state.isOwnVideoOpen
     },
   }
@@ -54,7 +57,7 @@ export const currentRoomSlice = createSlice({
 
 export const {
   removeUserById,
-  leaveRoom,
+  leaveRoomById,
   setUsers,
   updateUserNameById,
   joinRoom,

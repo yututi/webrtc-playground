@@ -33,4 +33,4 @@ export type OfferInfo = {
   offer?: RTCSessionDescriptionInit
   name: string
 }
-export type Theme = "light" | "dark" | "red" | "green" | "blue" | "orange"
+export type Theme = "light" | "dark" | "orange"

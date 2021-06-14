@@ -4,11 +4,13 @@ export function classMap(obj: { [key: string]: any }): string {
   return Object.keys(obj).filter(className => obj[className]).join(" ")
 }
 
-const base = isDevelopment ? "http://localhost:5000" : window.location
+let base = isDevelopment ? "http://localhost:5000" : `${window.location.protocol}//${window.location.host}`
+if(!base.endsWith("/")) base = base + "/"
+
 export function get(path: string, param?: { [key: string]: any }) {
 
   const queries = param ? `?${new URLSearchParams(param)}` : ""
-  const url = `${base}/${path}${queries}`
+  const url = `${base}${path}${queries}`
 
   return fetch(url, {
     method: "GET",
@@ -18,7 +20,7 @@ export function get(path: string, param?: { [key: string]: any }) {
 
 export function post(path: string, param?: { [key: string]: any }) {
 
-  const url = `${base}/${path}`
+  const url = `${base}${path}`
   const headers = new Headers()
   headers.append("Content-Type", "application/json")
 
@@ -31,7 +33,7 @@ export function post(path: string, param?: { [key: string]: any }) {
 
 export function deletee(path: string) {
 
-  const url = `${base}/${path}`
+  const url = `${base}${path}`
 
   return fetch(url, {
     method: "DELETE"

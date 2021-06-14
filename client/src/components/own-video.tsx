@@ -80,7 +80,7 @@ const Video = React.memo(() => {
 
   return (
     <div className="video">
-      <video ref={ref} autoPlay></video>
+      <video ref={ref} autoPlay playsInline></video>
     </div>
   )
 })

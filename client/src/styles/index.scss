@@ -8,6 +8,13 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--background);
   color: var(--on-background);
+
+  font-size: 16px;
+
+  // スマホはフォントサイズ16pxより大きくしないとテキスト選択時にズームされる
+  @include sp {
+    font-size: 20px;
+  }
 }
 
 * {
@@ -296,7 +303,7 @@ input[type="range"] {
   border-radius: 999px;
   border: none;
   height: 4px;
-  background-color: var(--on-component-color);
+  background-color: white;
   // ↓設定して、background-sizeプロパティを動的にいじればスライダーの左側に色を塗れる
   // background-image: linear-gradient(#ff4500, #ff4500);
   // background-repeat: no-repeat;

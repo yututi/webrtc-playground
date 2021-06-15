@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { RootState } from "redux/store"
 import { isMobile } from "utils"
-import { Theme } from "types"
+import { Theme, Media } from "types"
 
 export interface GlobalState {
   status: "idle" | "loading"
@@ -10,7 +10,8 @@ export interface GlobalState {
   userName: string
   isUserNameDefined: boolean,
   isNavOpen: boolean
-  theme: Theme
+  theme: Theme,
+  media: Media
 }
 
 const initialState: GlobalState = {
@@ -20,7 +21,8 @@ const initialState: GlobalState = {
   userName: "Guest",
   isUserNameDefined: false,
   isNavOpen: !isMobile,
-  theme: "light"
+  theme: "light",
+  media: null
 }
 
 export const slice = createSlice({
@@ -42,7 +44,10 @@ export const slice = createSlice({
     },
     setTheme: (state, action: PayloadAction<Theme>) => {
       state.theme = action.payload
-    }
+    },
+    setMedia: (state, action: PayloadAction<Media>) => {
+      state.media = action.payload
+    },
   }
 })
 export const {
@@ -50,7 +55,8 @@ export const {
   toggleNavOpen,
   setUserName,
   setUserId,
-  setTheme
+  setTheme,
+  setMedia
 } = slice.actions
 
 export const selectIsLoading = (state: RootState) => state.global.status === "loading"

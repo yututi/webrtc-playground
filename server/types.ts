@@ -34,3 +34,4 @@ export type OfferInfo = {
   name: string
 }
 export type Theme = "light" | "dark" | "orange"
+export type Media = "sp" | "pc"

@@ -16,6 +16,7 @@ import {
 import { joinRoom } from "redux/slices/current-room"
 import useRooms from "hooks/rooms";
 import { useHistory } from "react-router-dom";
+import { toggleNavOpen } from "redux/slices/global";
 
 const RoomAdder = React.lazy(() => import("components/room-adder"))
 
@@ -62,13 +63,18 @@ type Props = {
 }
 const RoomComponent: React.FC<Props> = ({ room }) => {
 
-  const dispatch = useAppDispatch()
-
   const history = useHistory()
+
+  const shouldCloseNavOnRoomSelect = useAppSelector(state => state.global.media === "sp")
+
+  const dispatch = useAppDispatch()
 
   const onClick = () => {
     dispatch(joinRoom(room))
     history.push(`/rooms/${room.id}`)
+    if(shouldCloseNavOnRoomSelect) {
+      dispatch(toggleNavOpen())
+    }
   }
 
   return (

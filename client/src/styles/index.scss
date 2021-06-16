@@ -225,12 +225,17 @@ body,
       color: var(--disable);
     }
 
+    flex-basis: 0;
+    flex-grow: 1;
+    flex-shrink: 0;
     min-width: 70px;
     text-align: right;
   }
 
   &__input {
-    flex: 1;
+    flex-basis: 0;
+    flex-grow: 5;
+    flex-shrink: 1;
     margin-left: 1em;
     max-width: 300px;
   }

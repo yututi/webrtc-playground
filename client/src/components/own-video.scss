@@ -6,18 +6,6 @@
   }
 }
 
-.device-select {
-  display: flex;
-
-  &__label {
-    width: 150px;
-  }
-
-  &__select {
-    flex: 1;
-  }
-}
-
 .my-video {
   position: fixed;
   bottom: 8px;

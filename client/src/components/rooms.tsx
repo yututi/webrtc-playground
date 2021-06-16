@@ -4,11 +4,10 @@ import { faUsers } from "@fortawesome/free-solid-svg-icons"
 import { Room } from "types"
 import "./rooms.scss"
 // import { useRoomContext } from "modules/current-room";
-import { useAppDispatch, useAppSelector } from "redux/hooks"
+import { useAppSelector } from "redux/hooks"
 import {
   selectRooms, selectUsersByRoomId
 } from "redux/slices/rooms"
-import { joinRoom } from "redux/slices/current-room"
 import { useHistory } from "react-router-dom";
 
 const RoomAdder = React.lazy(() => import("components/room-adder"))
@@ -19,9 +18,6 @@ const Rooms: React.FC = React.memo(() => {
 
   return (
     <div className="rooms">
-      <div className="rooms__header">
-        <span>部屋</span>
-      </div>
       {rooms.map(room => <RoomComponent key={room.id} room={room}></RoomComponent>)}
       <Suspense fallback={null}><RoomAdder /></Suspense>
     </div>

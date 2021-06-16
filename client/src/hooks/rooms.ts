@@ -1,54 +1,77 @@
-import { useEffect, useRef } from "react"
+import { useEffect } from "react"
 import { useSocket } from "./socket"
 import { getRooms } from "api"
-import { Room, UserWithRoom } from "types"
+import { Room, UserStateChangedEvent } from "types"
+import { useAppDispatch } from "redux/hooks"
+import {
+  addUser,
+  addRoom,
+  removeUser,
+  removeRoom,
+  setRooms,
+  updateUserState,
+  setUsers
+} from "redux/slices/rooms"
 
 type RoomEvent = (room: Room) => void
-type RoomsEvent = (room: Room[]) => void
-type MemberEvent = (room: UserWithRoom) => void
+type MemberEvent = (room: UserStateChangedEvent) => void
 
-type UseRoomsArgs = {
-  onRooms: RoomsEvent
-  onRoomAdded: RoomEvent
-  onRoomRemoved: RoomEvent
-  onMemberJoined: MemberEvent
-  onMemberLeaved: MemberEvent
-}
-
-export default function useRooms(args: UseRoomsArgs) {
+export default function useRoomsSyncronizer() {
 
   const socket = useSocket()
 
-  console.log({socket})
-
-  const eventsRef = useRef<UseRoomsArgs>()
-  eventsRef.current = args
+  const dispatch = useAppDispatch()
 
   useEffect(() => {
-    getRooms().then(rooms => eventsRef.current.onRooms(rooms)) // FIXME
-  }, [])
+    // socketが無ければ同期できないのでまだfetchしない
+    if (!socket) return
+
+    getRooms().then(data => {
+      dispatch(setRooms(data.rooms))
+      dispatch(setUsers(data.users))
+    })
+
+    return () => {
+      dispatch(setRooms([]))
+      dispatch(setUsers([]))
+    }
+  }, [dispatch, socket])
 
   useEffect(() => {
     if (!socket) return
 
     const onRoomAdded: RoomEvent = room => {
-      eventsRef.current.onRoomAdded(room)
+      dispatch(addRoom(room))
     }
     const onRoomRemoved: RoomEvent = room => {
-      eventsRef.current.onRoomRemoved(room)
+      dispatch(removeRoom(room.id))
     }
-    const onMemberJoined: MemberEvent = user => {
-      eventsRef.current.onMemberJoined(user)
+    const onMemberJoined: MemberEvent = e => {
+      switch (e.type) {
+        case "create": {
+          return dispatch(addUser(e.user))
+        }
+        case "delete": {
+          return dispatch(removeUser(e.user.id))
+        }
+        case "update": {
+          return dispatch(updateUserState(e.user))
+        }
+      }
     }
-    const onMemberLeaved: MemberEvent = user => {
-      eventsRef.current.onMemberLeaved(user)
+
+    const onReconnect = () => {
+      getRooms().then(data => {
+        dispatch(setRooms(data.rooms))
+        dispatch(setUsers(data.users))
+      })
     }
 
     const events = {
       "room-added": onRoomAdded,
       "room-removed": onRoomRemoved,
-      "member-joined": onMemberJoined,
-      "member-leaved": onMemberLeaved
+      "user-state-changed": onMemberJoined,
+      "reconnect": onReconnect
     }
 
     Object.entries(events).forEach(([name, handler]) => {
@@ -61,5 +84,5 @@ export default function useRooms(args: UseRoomsArgs) {
       })
     }
 
-  }, [socket])
+  }, [dispatch, socket])
 }

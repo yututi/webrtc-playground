@@ -4,7 +4,7 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons"
 import "./room-adder.scss"
 import IconBtn from "./icon-btn";
 
-const RoomAdder: React.FC = () => {
+const RoomAdder: React.FC = React.memo(() => {
 
   const history = useHistory()
 
@@ -19,6 +19,6 @@ const RoomAdder: React.FC = () => {
       />
     </div>
   )
-}
+})
 
 export default RoomAdder

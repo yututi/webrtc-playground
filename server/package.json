@@ -2,11 +2,11 @@
   "name": "server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/index.js",
   "type": "commonjs",
   "scripts": {
-    "start": "set NODE_ENV=production && node index.js",
-    "dev": "set NODE_ENV=production && ts-node index.ts",
+    "start": "set NODE_ENV=production && node src/index.js",
+    "dev": "set NODE_ENV=production && ts-node src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "gcp-build": "tsc index.ts"
   },

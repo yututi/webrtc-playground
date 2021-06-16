@@ -23,6 +23,8 @@ export const SocketProvider: React.FC = ({ children }) => {
   const socket = useMemo(() => {
     if (!userIsDefined) return null
 
+    console.log("create socket.", userName)
+
     const socket = io(HOST, {
       query: {
         userName
@@ -32,6 +34,9 @@ export const SocketProvider: React.FC = ({ children }) => {
 
     // 払いだされたidをReduxに渡す
     socket.on("connect", () => {
+      if (socket.connected) {
+        console.log("socket connected.", { socket })
+      }
       socket.connected && dispatch(setUserId(socket.id))
     })
 

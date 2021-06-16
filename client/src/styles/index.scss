@@ -236,6 +236,12 @@ body,
   }
 }
 
+input,
+button {
+  @include sp {
+    font-size: 18px;
+  }
+}
 button.btn,
 input[type="button"].btn {
   background-color: var(--component-color);

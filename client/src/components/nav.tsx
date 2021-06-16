@@ -30,10 +30,21 @@ const Nav: React.FC<Props> = ({ isRightSide = false, children }) => {
     "modal--is-open": shouldAppendAnimationClass
   })
 
+  
+  const shouldCloseNavOnRoomSelect = useAppSelector(state => state.global.media === "sp")
+
+  const onNavClicked = () => {
+    shouldCloseNavOnRoomSelect && dispatch(toggleNavOpen())
+  }
+
   return (
     <>
       {animationDomExists && <div className={`modal ${modalClass} hide-on-pc`} onClick={() => dispatch(toggleNavOpen())}></div>}
-      <nav className={`nav component ${navClass}`} onTransitionEnd={e => e.target === e.currentTarget && onAnimationEnd()}>
+      <nav 
+        className={`nav component ${navClass}`} 
+        onTransitionEnd={e => e.target === e.currentTarget && onAnimationEnd()}
+        onClick={onNavClicked}
+      >
         {children}
       </nav>
     </>

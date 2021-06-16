@@ -1,7 +1,15 @@
 // import firebase, { store } from "modules/firebase"
-import { useEffect, useRef } from "react"
+import { useEffect } from "react"
 import { useSocket } from "./socket"
 import { User } from "types"
+import { useAppDispatch } from "redux/hooks"
+import {
+  addUser,
+  removeUserById,
+  setUsersWithoutMyOwn,
+  leaveRoomById,
+  setCurrentRoomById
+} from "redux/slices/current-room"
 
 type OfferInfo = {
   from: string
@@ -9,43 +17,34 @@ type OfferInfo = {
   name: string
 }
 type RoomJoinedEvent = (alreadyJoinedMembers: User[]) => void
-type RoomLeavedEvent = () => void
 type MemberLeavedEvent = (leavedMemberId: string) => void
 type MemberJoinedEvent = (offer: OfferInfo) => void
 
-type UseRoomArgs = {
-  roomId: string
-  onRoomJoined: RoomJoinedEvent,
-  onMemberLeaved: MemberLeavedEvent,
-  onMemberJoined: MemberJoinedEvent,
-  onRoomLeaved: RoomLeavedEvent
-}
-
-const useCurrentRoom = ({ roomId, ...args }: UseRoomArgs) => {
+const useCurrentRoomSyncronizer = (roomId: string) => {
 
   const socket = useSocket()
 
-  const eventsArgs = useRef<{
-    onRoomJoined: RoomJoinedEvent,
-    onMemberLeaved: MemberLeavedEvent,
-    onMemberJoined: MemberJoinedEvent,
-    onRoomLeaved: RoomLeavedEvent
-  }>(null)
-  eventsArgs.current = args
+  const dispatch = useAppDispatch()
 
   useEffect(() => {
     if (!roomId || !socket) return
 
+    dispatch(setCurrentRoomById(roomId))
+
     socket.emit("join-room", roomId)
 
     const onMemberJoined: MemberJoinedEvent = (offer) => {
-      eventsArgs.current.onMemberJoined(offer)
+      dispatch(addUser({
+        id: offer.from,
+        name: offer.name,
+        offer: offer.offer
+      }))
     }
     const onMemberLeaved: MemberLeavedEvent = (userId) => {
-      eventsArgs.current.onMemberLeaved(userId)
+      dispatch(removeUserById(userId))
     }
     const onRoomJoined: RoomJoinedEvent = (users) => {
-      eventsArgs.current.onRoomJoined(users)
+      dispatch(setUsersWithoutMyOwn(users))
     }
 
     const events = {
@@ -63,9 +62,9 @@ const useCurrentRoom = ({ roomId, ...args }: UseRoomArgs) => {
         socket.off(name, handler)
       })
       socket.emit("leave-room", roomId)
-      eventsArgs.current.onRoomLeaved()
+      dispatch(leaveRoomById(roomId))
     }
-  }, [roomId, socket])
+  }, [dispatch, roomId, socket])
 }
 
-export default useCurrentRoom
+export default useCurrentRoomSyncronizer

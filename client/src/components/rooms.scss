@@ -1,5 +1,9 @@
 .rooms {
   padding: 1em;
+
+  &__title {
+    margin: 6px 0px;
+  }
 }
 
 .room {

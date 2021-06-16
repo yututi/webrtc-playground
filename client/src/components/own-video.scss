@@ -24,7 +24,7 @@
   border-radius: 8px;
   transition: transform 0.13s ease-in-out;
 
-  transform: translateY(calc(100% - 42px));
+  transform: translateY(calc(100% - 2.5em));
 
   &--is-open {
     transform: translateY(0px);

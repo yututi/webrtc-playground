@@ -8,6 +8,8 @@ import { selectIsNavOpen, setMedia } from "redux/slices/global"
 import { Route, Switch, Link } from 'react-router-dom';
 import useMediaQuery from "hooks/media"
 
+import useRoomsSyncronizer from "hooks/rooms";
+
 const CurrentRoom = React.lazy(() => import("components/current-room"))
 
 
@@ -28,6 +30,8 @@ export default function App() {
       dispatch(setMedia(isPc ? "pc" : "sp"))
     }
   })
+
+  useRoomsSyncronizer()
 
   return (
     <main className={classes}>

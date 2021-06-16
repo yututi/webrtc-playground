@@ -1,7 +1,7 @@
 import { get, post, deletee } from "utils"
-import { Room, User } from "types"
+import { Room, User, UserAndRoom } from "types"
 
-export const getRooms = (): Promise<Room[]> => {
+export const getRooms = (): Promise<UserAndRoom> => {
   return get("api/rooms")
     .then(res => res.json())
 }

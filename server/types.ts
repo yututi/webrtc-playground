@@ -7,11 +7,15 @@ export type UserWithOffer = {
 export type User = {
   id: string
   name: string
+  roomId?: string
+}
+export type UserStateChangedEvent = {
+  type: "create" | "update" | "delete"
+  user: User
 }
 export type Room = {
   id: string
   name: string
-  numberOfPeople?: number
 }
 export type UserWithRoom = {
   // room name
@@ -35,3 +39,7 @@ export type OfferInfo = {
 }
 export type Theme = "light" | "dark" | "orange"
 export type Media = "sp" | "pc"
+export type UserAndRoom = {
+  rooms: Room[],
+  users: User[]
+}

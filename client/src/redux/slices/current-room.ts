@@ -75,5 +75,13 @@ export const setUsersWithoutMyOwn = (users: UserWithOffer[]): AppThunk => (
   dispatch(setUsers(users.filter(user => user.id !== id)))
 };
 
+export const setCurrentRoomById = (roomId: string): AppThunk => (
+  dispatch,
+  getState
+) => {
+  const room = getState().rooms.rooms.find(room => room.id === roomId)
+  dispatch(joinRoom(room))
+};
+
 
 export default currentRoomSlice.reducer

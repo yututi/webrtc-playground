@@ -1,29 +1,29 @@
 @import "~styles/media.scss";
 
 .toasts {
-    position: absolute;
+  position: absolute;
 
-    @include pc {
-      top: 8px;
-      right: 8px;
-    }
+  @include pc {
+    top: 8px;
+    right: 8px;
+  }
+
+  @include sp {
+    top: 0px;
+    right: 8px;
+    left: 8px;
+  }
+
+  display: flex;
+  flex-direction: column-reverse;
+
+  &__toast {
+    width: 300px;
 
     @include sp {
-      top: 0px;
-      right: 8px;
-      left: 8px;
+      width: 100%;
     }
-
-    display: flex;
-    flex-direction: column-reverse;
-
-    &__toast {
-      width: 300px;
-
-      @include sp {
-        width: 100%;
-      }
-    }
+  }
 }
 
 .toast {
@@ -32,14 +32,17 @@
   border-radius: 6px;
   margin-top: 6px;
   padding: 8px 12px;
+
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.26);
+
   &--is-info {
     background-color: var(--primary);
-    color: var(--on-primary);      
+    color: var(--on-primary);
   }
 
   &--is-error {
     background-color: var(--error);
-    color: var(--on-error);      
+    color: var(--on-error);
   }
 }
 

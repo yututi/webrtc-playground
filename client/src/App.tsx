@@ -8,7 +8,6 @@ import useMediaQuery from "hooks/media"
 import Toasts from "components/toast"
 
 import useRoomsSyncronizer from "hooks/rooms";
-import { addInfoMessage } from "redux/slices/messages"
 import Routes from "routes"
 
 
@@ -29,18 +28,6 @@ export default function App() {
       dispatch(setMedia(isPc ? "pc" : "sp"))
     }
   })
-
-  useEffect(() => {
-    setTimeout(() => {
-      dispatch(addInfoMessage("test1ssssssssあうｄふぃおｓｇじょぎｇｌｋうぇｒｈｇｈｇ"))
-      setTimeout(() => {
-        dispatch(addInfoMessage("test2"))
-        dispatch(addInfoMessage("test3"))
-        dispatch(addInfoMessage("test4"))
-      }, 2000)
-
-    }, 2000)
-  }, [dispatch])
 
   useRoomsSyncronizer()
 

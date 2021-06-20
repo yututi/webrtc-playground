@@ -61,6 +61,6 @@ export const {
 
 export const selectRooms = (state: RootState) => state.rooms.rooms
 
-export const selectUsersByRoomId = (roomId: string) => (state: RootState) => state.rooms.users.filter(user => user.roomId === roomId)
+export const selectUsersByRoomId = (roomId: string) => (state: RootState) => state.rooms.users.filter(user => user.roomId === roomId) || []
 
 export default roomsSlice.reducer

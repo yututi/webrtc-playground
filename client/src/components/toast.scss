@@ -1,0 +1,61 @@
+@import "~styles/media.scss";
+
+.toasts {
+    position: absolute;
+
+    @include pc {
+      top: 8px;
+      right: 8px;
+    }
+
+    @include sp {
+      top: 0px;
+      right: 8px;
+      left: 8px;
+    }
+
+    display: flex;
+    flex-direction: column-reverse;
+
+    &__toast {
+      width: 300px;
+
+      @include sp {
+        width: 100%;
+      }
+    }
+}
+
+.toast {
+  background-color: var(--component-color);
+  color: var(--on-component-color);
+  border-radius: 6px;
+  margin-top: 6px;
+  padding: 8px 12px;
+  &--is-info {
+    background-color: var(--primary);
+    color: var(--on-primary);      
+  }
+
+  &--is-error {
+    background-color: var(--error);
+    color: var(--on-error);      
+  }
+}
+
+.toast-enter {
+  opacity: 0;
+  transform: translateY(-50%);
+}
+.toast-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 0.3s;
+}
+.toast-exit {
+  opacity: 1;
+}
+.toast-exit-active {
+  opacity: 0;
+  transition: all 0.3s;
+}

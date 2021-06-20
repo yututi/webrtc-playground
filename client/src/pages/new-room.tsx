@@ -3,7 +3,7 @@ import { classMap } from "utils"
 import { createNewRoom } from "api"
 import { useHistory } from "react-router-dom"
 import "./new-room.scss"
-import B2HBtn from "./back-to-home-btn";
+import B2HBtn from "components/back-to-home-btn";
 
 const NewRoom: React.VFC = () => {
 
@@ -30,8 +30,9 @@ const NewRoom: React.VFC = () => {
   }
 
   return (
-    <form ref={form} className={`card form new-room ${classMap({ checked: hasError })}`}>
+    <div className={`card form new-room ${classMap({ checked: hasError })}`}>
       <B2HBtn />
+      <form ref={form}>
       <fieldset className="mt-1" disabled={isLoading}>
         <div className="field">
           <label htmlFor="roomname" className="field__label">ルーム名</label>
@@ -93,7 +94,8 @@ const NewRoom: React.VFC = () => {
           <button type="button" className="btn" onClick={onDefined}>作成</button>
         </div>
       </fieldset>
-    </form>
+      </form>
+    </div>
   )
 }
 

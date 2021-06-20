@@ -16,7 +16,7 @@ export class P2P {
   private connection: RTCPeerConnection = null
   private remoteStream: MediaStream = new MediaStream()
   // オーディオ出力先を変える場合、audioのstreamをaudio要素へ向ける必要がある(setSinkIdがHTMLMediaElementにしかないので)
-  // その場合は以下のようにstreaを分ける必要あり
+  // その場合は以下のようにstreamを分ける必要あり
   // private remoteVideoStream: MediaStream = new MediaStream()
   // private remoteAudioStream: MediaStream = new MediaStream()
 
@@ -27,6 +27,9 @@ export class P2P {
   private videoSender: RTCRtpSender
   private audioSender: RTCRtpSender
 
+  /**
+   * カメラ未接続時にP2P接続するためのダミーtrack
+   */
   get dummyVideoTrack() {
     const canvas = document.createElement("canvas") as CanvasElement
     canvas.width = this.width
@@ -35,7 +38,10 @@ export class P2P {
     return canvas.captureStream(1).getVideoTracks()[0]
   }
 
-  get dummyAudioTrack() {
+  /**
+   * オーディオ未接続時にP2P接続するためのダミーtrack
+   */
+   get dummyAudioTrack() {
     const ctx = new AudioContext()
     const oscillator = ctx.createOscillator()
     const dist = oscillator.connect(ctx.createMediaStreamDestination()) as MediaStreamAudioDestinationNode

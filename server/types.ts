@@ -43,3 +43,6 @@ export type UserAndRoom = {
   rooms: Room[],
   users: User[]
 }
+export type ErrorResponse = {
+  message: string
+}

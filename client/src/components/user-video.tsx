@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { UserWithOffer } from "types";
 import { useP2PConnect } from "hooks/p2p-connect";
-import { useAppSelector } from "redux/hooks";
+import { useAppDispatch, useAppSelector } from "redux/hooks";
 import useMouseInOut from "hooks/mouse-in-out";
 import IconBtn from "components/icon-btn"
 import {
@@ -10,6 +10,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons"
 
 import "./user-video.scss"
+import { addInfoMessage } from "redux/slices/messages";
 
 // リモートユーザのビデオ
 
@@ -25,6 +26,8 @@ const User: React.VFC<Props> = ({ user }) => {
 
   const [volume, setVolume] = useState(0.5)
   const [isMute, setIsMute] = useState(false)
+
+  const dispatch = useAppDispatch()
 
   const {
     ref,
@@ -66,6 +69,12 @@ const User: React.VFC<Props> = ({ user }) => {
   useEffect(() => {
     videoRef.current.volume = isMute ? 0 : volume
   }, [volume, isMute])
+
+  useEffect(() => {
+    if (user.offer) {
+      dispatch(addInfoMessage(`${user.name}が入室しました`))
+    }
+  }, [dispatch, user])
 
   const overlayClasses = [
     "video__overlay",

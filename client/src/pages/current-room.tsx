@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import User from "components/user-video"
 import MyVideo from "components/own-video"
 import "./current-room.scss"
-import { useAppSelector } from "redux/hooks"
+import { useAppDispatch, useAppSelector } from "redux/hooks"
 import useCurrentRoomSyncronizer from "hooks/current-room";
 import { useParams } from "react-router-dom";
-import B2HBtn from "./back-to-home-btn";
+import B2HBtn from "components/back-to-home-btn";
+import { addInfoMessage } from "redux/slices/messages";
 
 
 const CurrentRoom: React.VFC = () => {
@@ -15,10 +16,12 @@ const CurrentRoom: React.VFC = () => {
   useCurrentRoomSyncronizer(roomId)
 
   return (
-    <div className="card current-room">
-      <Header />
-      <Users />
-      <MyVideo />
+    <div className="page-predentation">
+      <div className="card current-room">
+        <Header />
+        <Users />
+        <MyVideo />
+      </div>
     </div>
   )
 }
@@ -26,6 +29,14 @@ const CurrentRoom: React.VFC = () => {
 const Header: React.VFC = () => {
 
   const room = useAppSelector(root => root.currentRoom.room)
+
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    if (room) {
+      dispatch(addInfoMessage(`${room.name}に入室しました`))
+    }
+  }, [dispatch, room])
 
   return (
     <div className="current-room__header flex is-align-center">

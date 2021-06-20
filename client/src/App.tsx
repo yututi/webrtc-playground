@@ -1,16 +1,15 @@
-import React, { Suspense, useEffect } from "react"
+import { useEffect } from "react"
 import Rooms from "components/rooms"
 import Header from "components/header"
 import Nav from "components/nav"
-import NewRoom from "components/new-room"
 import { useAppDispatch, useAppSelector } from "redux/hooks"
 import { selectIsNavOpen, setMedia } from "redux/slices/global"
-import { Route, Switch, Link } from 'react-router-dom';
 import useMediaQuery from "hooks/media"
+import Toasts from "components/toast"
 
 import useRoomsSyncronizer from "hooks/rooms";
-
-const CurrentRoom = React.lazy(() => import("components/current-room"))
+import { addInfoMessage } from "redux/slices/messages"
+import Routes from "routes"
 
 
 export default function App() {
@@ -31,6 +30,18 @@ export default function App() {
     }
   })
 
+  useEffect(() => {
+    setTimeout(() => {
+      dispatch(addInfoMessage("test1ssssssssあうｄふぃおｓｇじょぎｇｌｋうぇｒｈｇｈｇ"))
+      setTimeout(() => {
+        dispatch(addInfoMessage("test2"))
+        dispatch(addInfoMessage("test3"))
+        dispatch(addInfoMessage("test4"))
+      }, 2000)
+
+    }, 2000)
+  }, [dispatch])
+
   useRoomsSyncronizer()
 
   return (
@@ -43,6 +54,7 @@ export default function App() {
         <Nav>
           <Rooms />
         </Nav>
+        <Toasts />
       </Body>
     </main>
   )
@@ -68,22 +80,7 @@ const Content = () => {
 
   return (
     <div className="body__content">
-      <Suspense fallback={false}>
-        <Switch>
-          <Route exact path="/" component={Empty} />
-          <Route path="/rooms/:roomId" component={CurrentRoom} />
-          <Route path="/newroom" component={NewRoom} />
-        </Switch>
-      </Suspense>
-    </div>
-  )
-}
-
-const Empty = () => {
-
-  return (
-    <div className="card emptypage">
-      <span>↖️メニューを開いて部屋を選択<br />または、<Link to="/newroom">新しく部屋を作成</Link></span>
+      <Routes></Routes>
     </div>
   )
 }

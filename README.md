@@ -21,6 +21,7 @@ npm run dev
 
 ```
 cd client
+npm run build
 gcloud app deploy client.yaml
 ```
 

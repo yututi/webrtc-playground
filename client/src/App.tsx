@@ -1,4 +1,3 @@
-import { useEffect } from "react"
 import Rooms from "components/rooms"
 import Header from "components/header"
 import Nav from "components/nav"
@@ -34,7 +33,7 @@ export default function App() {
   return (
     <main className={classes}>
       <Header
-        title="⚡️ WebRTC Playground"
+        title="WebRTC Playground"
       />
       <Body>
         <Content />

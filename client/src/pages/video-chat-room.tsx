@@ -7,6 +7,7 @@ import useCurrentRoomSyncronizer from "hooks/current-room";
 import { useParams } from "react-router-dom";
 import B2HBtn from "components/back-to-home-btn";
 import { addInfoMessage } from "redux/slices/messages";
+import useMediaQuery from "hooks/media";
 
 
 const CurrentRoom: React.VFC = () => {
@@ -49,6 +50,9 @@ const Header: React.VFC = () => {
 const Users: React.VFC = () => {
 
   const users = useAppSelector(root => root.currentRoom.users)
+  const media = useAppSelector(root => root.global.media)
+
+  const width = calcWidth(users, media)
 
   return (
     <div className="current-room__users users">
@@ -56,13 +60,22 @@ const Users: React.VFC = () => {
         <div
           className="users__user"
           key={user.id}
-        // style={userStyle}
+          style={{width}}
         >
           <User user={user}></User>
         </div>
       ))}
     </div>
   )
+}
+
+const calcWidth = (users, media) => {
+  if (media === "sm") return "100%"
+  const isMd = media === "md"
+  const hasManyThreashould = isMd ? 2 : 4
+  const hasManyUser = users.length >= hasManyThreashould
+  if (hasManyUser) return isMd ? "50%" : "25%"
+  return `${100/users.length}%`
 }
 
 export default CurrentRoom

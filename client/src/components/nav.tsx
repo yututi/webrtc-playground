@@ -31,7 +31,7 @@ const Nav: React.FC<Props> = ({ isRightSide = false, children }) => {
   })
 
   
-  const shouldCloseNavOnRoomSelect = useAppSelector(state => state.global.media === "sp")
+  const shouldCloseNavOnRoomSelect = useAppSelector(state => state.global.media === "sm")
 
   const onNavClicked = () => {
     shouldCloseNavOnRoomSelect && dispatch(toggleNavOpen())

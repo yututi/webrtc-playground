@@ -22,9 +22,21 @@ export default function App() {
   const dispatch = useAppDispatch()
 
   useMediaQuery({
-    query: "(min-width: 799px)",
+    query: "(max-width: 799px)",
+    onMediaMatched: matched => {
+      matched && dispatch(setMedia("sm"))
+    }
+  })
+  useMediaQuery({
+    query: "(max-width: 1500px) and (min-width: 800px)",
+    onMediaMatched: matched => {
+      matched && dispatch(setMedia("md"))
+    }
+  })
+  useMediaQuery({
+    query: "(min-width: 1501px)",
     onMediaMatched: isPc => {
-      dispatch(setMedia(isPc ? "pc" : "sp"))
+      isPc && dispatch(setMedia("lg")) 
     }
   })
 

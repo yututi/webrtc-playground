@@ -6,20 +6,10 @@
   align-items: center;
   justify-content: flex-start;
   padding: 16px;
+  transition: all 0.3s;
 
   &__user {
-    @include sm {
-      width: 100%;
-    }
-
-    @include md {
-      width: 50%;
-    }
-
-    @include lg {
-      width: 25%;
-      max-width: 500px;
-    }
+    transition: all 0.3s;
     padding: 6px;
   }
 }

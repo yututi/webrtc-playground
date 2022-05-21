@@ -38,7 +38,7 @@ export type OfferInfo = {
   name: string
 }
 export type Theme = "light" | "dark" | "orange"
-export type Media = "sp" | "pc"
+export type Media = "sm" | "md" | "lg"
 export type UserAndRoom = {
   rooms: Room[],
   users: User[]

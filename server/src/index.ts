@@ -19,7 +19,6 @@ app.use(express.json())
 app.get("/api/rooms", (req, res) => {
   const rooms = roomRepo.listRooms()
   const users = userRepo.listUsers()
-  console.log(rooms)
   res.status(200).json({
     rooms,
     users
@@ -142,8 +141,6 @@ io.of("/").adapter.on("delete-room", (roomId) => {
 // 入室時
 io.of("/").adapter.on("join-room", (room, id) => {
   if (room !== id) {
-    console.log(`socket ${id} has joined room ${room}`);
-
 
     roomRepo.joinRoom(room, id)
 

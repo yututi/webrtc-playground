@@ -3,21 +3,8 @@ import React, { Suspense } from 'react'
 import { Route } from 'react-router-dom'
 import { CSSTransition } from 'react-transition-group'
 
-const CurrentRoom = React.lazy(() => import("pages/current-room"))
+const CurrentRoom = React.lazy(() => import("pages/video-chat-room"))
 const NewRoom = React.lazy(() => import("pages/new-room"))
-// <TransitionRoute path="/">
-//   <Empty />
-// </TransitionRoute>
-// <TransitionRoute path="/rooms/:roomId">
-//   <Suspense fallback={false}>
-//     <CurrentRoom />
-//   </Suspense>
-// </TransitionRoute>
-// <TransitionRoute path="/newroom">
-//   <Suspense fallback={false}>
-//     <NewRoom />
-//   </Suspense>
-// </TransitionRoute>
 
 const routes = [
   { path: "/", Component: Empty },

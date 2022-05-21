@@ -15,7 +15,7 @@
   }
 }
 @mixin md {
-  @media only screen and (max-width: 1500px) and (min-width: 799px) {
+  @media only screen and (max-width: 1500px) and (min-width: 800px) {
     @content;
   }
 }

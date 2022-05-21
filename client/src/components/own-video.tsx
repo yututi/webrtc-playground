@@ -45,7 +45,6 @@ const Video = React.memo(() => {
     videoId,
     isVideoMute
   } = useAppSelector(state => state.devices.current)
-  console.log({isVideoMute, videoId})
 
   useEffect(() => {
     if (!videoId) return
@@ -62,7 +61,7 @@ const Video = React.memo(() => {
     navigator.mediaDevices.getUserMedia({
       video: {
         deviceId: videoId,
-        height: 300,
+        height: 240,
         width: 400
       },
       audio: false

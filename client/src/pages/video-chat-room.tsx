@@ -7,8 +7,6 @@ import useCurrentRoomSyncronizer from "hooks/current-room";
 import { useParams } from "react-router-dom";
 import B2HBtn from "components/back-to-home-btn";
 import { addInfoMessage } from "redux/slices/messages";
-import useMediaQuery from "hooks/media";
-
 
 const CurrentRoom: React.VFC = () => {
 

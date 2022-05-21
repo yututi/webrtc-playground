@@ -41,26 +41,26 @@ const User: React.VFC<Props> = ({ user }) => {
     localUserName,
   )
 
-  const [isVideoActive, setIsVideoActive] = useState(false)
+  // const [isVideoActive, setIsVideoActive] = useState(false)
 
   useEffect(() => {
     if (!p2p) return
 
-    const stream = p2p.stream
+    // FIXME: ビデオや音声が無効化された際のイベントは存在しない(onmuteってなんやねん)
+    // そのあたりのデータをやり取りするdatachannelを作る必要がある
+    // const videoTrack = stream.getVideoTracks()[0]
 
-    const videoTrack = stream.getVideoTracks()[0]
-
-    if (videoTrack) {
-      setIsVideoActive(videoTrack.enabled)
-      videoTrack.onmute = () => {
-        setIsVideoActive(false)
-      }
-      videoTrack.onunmute = () => {
-        setIsVideoActive(true)
-      }
-    } else {
-      setIsVideoActive(false)
-    }
+    // if (videoTrack) {
+    //   setIsVideoActive(videoTrack.enabled)
+    //   videoTrack.onmute = () => {
+    //     setIsVideoActive(false)
+    //   }
+    //   videoTrack.onunmute = () => {
+    //     setIsVideoActive(true)
+    //   }
+    // } else {
+    //   setIsVideoActive(false)
+    // }
 
     videoRef.current.srcObject = p2p.stream
 
@@ -83,6 +83,7 @@ const User: React.VFC<Props> = ({ user }) => {
 
   return (
     <div className="video user card card--is-primary" ref={ref}>
+      {/* {!isVideoActive && <div className="video__inactive"><span className="voice-only">Voice only</span></div>} */}
       <div className="video__inner">
         <video
           className="user__video"
@@ -91,7 +92,6 @@ const User: React.VFC<Props> = ({ user }) => {
           playsInline
         />
       </div>
-      {!isVideoActive && <div className="video__inactive"><span className="voice-only">Voice only</span></div>}
       <div className="user__name">
         {user.name}
       </div>

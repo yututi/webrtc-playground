@@ -1,4 +1,4 @@
 export const VIDEO = {
-    HEIGHT: 300,
+    HEIGHT: 250,
     WIDTH: 400
 } as const

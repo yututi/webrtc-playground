@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import User from "components/user-video"
 import MyVideo from "components/own-video"
-import "./current-room.scss"
+import "./video-chat-room.scss"
 import { useAppDispatch, useAppSelector } from "redux/hooks"
 import useCurrentRoomSyncronizer from "hooks/current-room";
 import { useParams } from "react-router-dom";

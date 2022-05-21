@@ -5,11 +5,27 @@ import { useHistory } from "react-router-dom"
 import "./new-room.scss"
 import B2HBtn from "components/back-to-home-btn";
 
+type Form = {
+  roomType: string
+}
+
+const rooms = [
+  {
+    value: "video-chat",
+    label: "ビデオチャット"
+  },
+  {
+    value: "video-share",
+    label: "画面共有"
+  }
+]
+
 const NewRoom: React.VFC = () => {
 
   const nameRef = useRef<HTMLInputElement>(null)
   const [hasError, setHasError] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [roomType, setRoomType] = useState("video-chat")
 
   const form = useRef<HTMLFormElement>(null)
 
@@ -19,9 +35,8 @@ const NewRoom: React.VFC = () => {
     if (form.current.checkValidity()) {
       setIsLoading(true)
       createNewRoom(nameRef.current.value).then(room => {
-        console.log("room created. ", room)
         history.push("/")
-      }).catch(() => {
+      }).finally(() => {
         setIsLoading(false)
       })
     } else {
@@ -48,36 +63,24 @@ const NewRoom: React.VFC = () => {
         <div className="field mt-1">
           <label className="field__label">タイプ</label>
           <div className="field__input">
-            <div className="field">
-              <input
-                id="video"
-                name="room-types"
-                type="radio"
-                defaultChecked
-                placeholder="ルーム名"
-              />
-              <label className="field__label" htmlFor="video">ビデオチャット</label>
-            </div>
-            <div className="field">
-              <input
-                id="text"
-                name="room-types"
-                type="radio"
-                disabled
-                placeholder="ルーム名"
-              />
-              <label className="field__label field__label--is-disable" htmlFor="text">テキストチャット(作成中)</label>
-            </div>
-            <div className="field">
-              <input
-                id="video-text"
-                name="room-types"
-                type="radio"
-                disabled
-                placeholder="ルーム名"
-              />
-              <label className="field__label field__label--is-disable" htmlFor="video-text">ビデオ/テキストチャット(作成中)</label>
-            </div>
+            {rooms.map(room => (
+              <div className="field" key={room.value}>
+                <input
+                  id={room.value}
+                  name="room-type"
+                  value={room.value}
+                  checked={room.value === roomType}
+                  type="radio"
+                  onChange={e => setRoomType(e.target.value)}
+                />
+                <label 
+                  className="field__label"
+                  htmlFor={room.value}
+                >
+                    {room.label}
+                </label>
+              </div>
+            ))}
           </div>
         </div>
         <div className="field">
@@ -85,7 +88,8 @@ const NewRoom: React.VFC = () => {
           <input
             id="max"
             className="field__input"
-            type="text"
+            type="number"
+            max="20"
             disabled
             placeholder="作成中"
           />
@@ -95,6 +99,30 @@ const NewRoom: React.VFC = () => {
         </div>
       </fieldset>
       </form>
+    </div>
+  )
+}
+
+type InputType = {
+  id: string
+  label: string
+  name: string
+  onChange: React.ChangeEventHandler<HTMLInputElement>
+}
+
+const LabeledRadio :React.VFC<InputType> = ({id, label, name, onChange}) => {
+
+  return (
+    <div className="field">
+      <input
+        id={id}
+        name={name}
+        value={id}
+        type="radio"
+        placeholder="ルーム名"
+        onChange={onChange}
+      />
+      <label className="field__label" htmlFor={id}>{label}</label>
     </div>
   )
 }

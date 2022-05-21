@@ -34,9 +34,6 @@ export const SocketProvider: React.FC = ({ children }) => {
 
     // 払いだされたidをReduxに渡す
     socket.on("connect", () => {
-      if (socket.connected) {
-        console.log("socket connected.", { socket })
-      }
       socket.connected && dispatch(setUserId(socket.id))
     })
 
